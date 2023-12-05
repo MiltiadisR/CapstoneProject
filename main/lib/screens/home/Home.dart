@@ -1,15 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:main/Calendar_View.dart';
 import 'package:main/Load_data.dart';
-import 'Reservation_Details.dart';
+import 'package:main/Menu.dart';
+import 'package:main/Profile.dart';
+import '../../Reservation_Details.dart';
 
-class Home_Page extends StatefulWidget {
-  const Home_Page({Key? key});
+class MyAppExtention extends StatefulWidget {
+  const MyAppExtention({super.key});
 
   @override
-  State<Home_Page> createState() => _Home_PageState();
+  State<MyAppExtention> createState() => _MyAppExtentionState();
 }
 
-class _Home_PageState extends State<Home_Page> {
+class _MyAppExtentionState extends State<MyAppExtention> {
+  String title = 'App Title';
+  int currentIndex = 0;
+  List<Widget> body = const [
+    Icon(Icons.home),
+    Icon(Icons.menu),
+    Icon(Icons.settings),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: currentIndex == 0
+              ? Text("Home")
+              : currentIndex == 1
+                  ? Text("Calendar")
+                  : currentIndex == 2
+                      ? Text("Profile")
+                      : Text("Menu")),
+      body: Center(
+          child: currentIndex == 0
+              ? Home()
+              : currentIndex == 1
+                  ? Calendar_View()
+                  : currentIndex == 2
+                      ? Profile_View()
+                      : Menu()),
+      bottomNavigationBar: (BottomNavigationBar(
+        type: BottomNavigationBarType
+            .fixed, // you need this for more than 3 items
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month), label: "Calendar"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outlined), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
+        ],
+        currentIndex: currentIndex,
+        onTap: (int index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+      )),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key? key});
+
+  @override
+  State<Home> createState() => _Home_PageState();
+}
+
+class _Home_PageState extends State<Home> {
   String buttonname = "Click";
 
   @override

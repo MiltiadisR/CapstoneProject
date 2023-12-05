@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'Profile.dart';
 import 'Calendar_View.dart';
 import 'Menu.dart';
-import 'Home.dart';
+import 'screens/Home/Home.dart';
 
 class All_Screen extends StatefulWidget {
   const All_Screen({super.key});
@@ -49,7 +49,7 @@ class _MyAppExtentionState extends State<MyAppExtention> {
                       : Text("Menu")),
       body: Center(
           child: currentIndex == 0
-              ? Home_Page()
+              ? Home()
               : currentIndex == 1
                   ? Calendar_View()
                   : currentIndex == 2

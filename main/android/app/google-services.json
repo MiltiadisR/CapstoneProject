@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "895725352961",
+    "project_id": "thesis-59879",
+    "storage_bucket": "thesis-59879.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895725352961:android:dac3bbe393c0539e19e800",
+        "android_client_info": {
+          "package_name": "com.CapstoneProject.main"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895725352961-od7655ar42de4vn6ob5pnr32pt93q2qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBgADRxslTrlXkkj8XR6jvC7nJ4knuTIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895725352961-od7655ar42de4vn6ob5pnr32pt93q2qi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

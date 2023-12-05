@@ -3,11 +3,11 @@
 
 import 'package:flutter/material.dart';
 
-import 'pages/basics_example.dart';
-import 'pages/complex_example.dart';
-import 'pages/events_example.dart';
-import 'pages/multi_example.dart';
-import 'pages/range_example.dart';
+import 'screens/basics_example.dart';
+import 'screens/complex_example.dart';
+import 'screens/events_example.dart';
+import 'screens/multi_example.dart';
+import 'screens/range_example.dart';
 
 class Calendar_View extends StatelessWidget {
   @override
