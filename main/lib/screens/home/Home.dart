@@ -24,13 +24,28 @@ class _MyAppExtentionState extends State<MyAppExtention> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: currentIndex == 0
-              ? Text("Home")
-              : currentIndex == 1
-                  ? Text("Calendar")
-                  : currentIndex == 2
-                      ? Text("Profile")
-                      : Text("Menu")),
+        title: currentIndex == 0
+            ? Text("Home")
+            : currentIndex == 1
+                ? Text("Calendar")
+                : currentIndex == 2
+                    ? Text("Profile")
+                    : Text("Menu"),
+        actions: [
+          ElevatedButton(
+            onPressed: () {},
+            child: Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.black,
+                ),
+                Text('Logout')
+              ],
+            ),
+          ),
+        ],
+      ),
       body: Center(
           child: currentIndex == 0
               ? Home()

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:main/servises/auth.dart';
 import 'Profile.dart';
 import 'Calendar_View.dart';
 import 'Menu.dart';
 import 'screens/Home/Home.dart';
+import 'servises/auth.dart';
 
 class All_Screen extends StatefulWidget {
   const All_Screen({super.key});
@@ -36,17 +38,36 @@ class _MyAppExtentionState extends State<MyAppExtention> {
     Icon(Icons.menu),
     Icon(Icons.settings),
   ];
+
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: currentIndex == 0
-              ? Text("Home")
-              : currentIndex == 1
-                  ? Text("Calendar")
-                  : currentIndex == 2
-                      ? Text("Profile")
-                      : Text("Menu")),
+        title: currentIndex == 0
+            ? Text("Home")
+            : currentIndex == 1
+                ? Text("Calendar")
+                : currentIndex == 2
+                    ? Text("Profile")
+                    : Text("Menu"),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              await _auth.signOut();
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.black,
+                ),
+                Text('Logout')
+              ],
+            ),
+          ),
+        ],
+      ),
       body: Center(
           child: currentIndex == 0
               ? Home()
