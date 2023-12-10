@@ -97,7 +97,7 @@ class _TestIcalState extends State<TestIcal> {
     allEvents.sort((a, b) {
       DateTime dateA = DateTime.parse(a['dtstart']['dt']);
       DateTime dateB = DateTime.parse(b['dtstart']['dt']);
-      return dateB.compareTo(dateA);
+      return dateA.compareTo(dateB);
     });
 
     // Apply property filter if selected

@@ -1,83 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:main/Calendar_View.dart';
 import 'package:main/Load_data.dart';
-import 'package:main/Menu.dart';
-import 'package:main/Profile.dart';
-import '../../Reservation_Details.dart';
-
-class MyAppExtention extends StatefulWidget {
-  const MyAppExtention({super.key});
-
-  @override
-  State<MyAppExtention> createState() => _MyAppExtentionState();
-}
-
-class _MyAppExtentionState extends State<MyAppExtention> {
-  String title = 'App Title';
-  int currentIndex = 0;
-  List<Widget> body = const [
-    Icon(Icons.home),
-    Icon(Icons.menu),
-    Icon(Icons.settings),
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: currentIndex == 0
-            ? Text("Home")
-            : currentIndex == 1
-                ? Text("Calendar")
-                : currentIndex == 2
-                    ? Text("Profile")
-                    : Text("Menu"),
-        actions: [
-          ElevatedButton(
-            onPressed: () {},
-            child: Row(
-              children: [
-                Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-                Text('Logout')
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: Center(
-          child: currentIndex == 0
-              ? Home()
-              : currentIndex == 1
-                  ? Calendar_View()
-                  : currentIndex == 2
-                      ? Profile_View()
-                      : Menu()),
-      bottomNavigationBar: (BottomNavigationBar(
-        type: BottomNavigationBarType
-            .fixed, // you need this for more than 3 items
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: "Calendar"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
-        ],
-        currentIndex: currentIndex,
-        onTap: (int index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-      )),
-    );
-  }
-}
+import 'package:main/Reservation_Details.dart';
+import '../../servises/database.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key});
@@ -87,119 +13,110 @@ class Home extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home> {
-  String buttonname = "Click";
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Personalized Greetings
-              Text(
-                'Good morning, [User]!', // Replace [User] with the actual user's name
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return StreamProvider<QuerySnapshot?>.value(
+      value: DatabaseService(uid: '').members,
+      initialData: null,
+      child: Scaffold(
+        body: Consumer<QuerySnapshot?>(
+          builder: (context, members, _) {
+            if (members == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            String userName = _getUserName(members);
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Personalized Greetings
+                    Text(
+                      'Hi, $userName!',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 16.0),
+
+                    // Upcoming Reservations Overview
+                    CardWidget(
+                      title: 'Upcoming Reservations',
+                      icon: Icons.calendar_today,
+                    ),
+
+                    SizedBox(height: 16.0),
+
+                    // Quick Actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Load_Data(),
+                              ),
+                            );
+                          },
+                          child: Text('Create Reservation'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Reservation_Details(),
+                              ),
+                            );
+                          },
+                          child: Text('Reservations'),
+                        ),
+                      ],
+                    ),
+
+                    // Other Card Widgets
+                    CardWidget(
+                        title: 'Notifications', icon: Icons.notifications),
+                    CardWidget(title: 'Search Bar', icon: Icons.search),
+                    CardWidget(title: 'Featured Content', icon: Icons.star),
+                    CardWidget(title: 'Recent Activity', icon: Icons.history),
+                    CardWidget(
+                      title: 'Promotions or Announcements',
+                      icon: Icons.announcement,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 16.0),
-
-              // Upcoming Reservations Overview
-              // Include your upcoming reservations widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Upcoming Reservations',
-                icon: Icons.calendar_today,
-              ),
-
-              SizedBox(height: 16.0),
-
-              // Quick Actions
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Load_Data()),
-                      );
-                      setState(() {
-                        buttonname = "Clicked";
-                      });
-                    },
-                    child: Text('Create Reservation'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => Reservation_Details()),
-                      );
-                      setState(() {
-                        buttonname = "Next Page";
-                      });
-                    },
-                    child: Text('Reservations'),
-                  ),
-                ],
-              ),
-
-              // Include additional sections based on your requirements
-
-              // Notifications
-              // Include your notifications widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Notifications',
-                icon: Icons.notifications,
-              ),
-
-              // Search Bar
-              // Include your search bar widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Search Bar',
-                icon: Icons.search,
-              ),
-
-              // Featured Content
-              // Include your featured content widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Featured Content',
-                icon: Icons.star,
-              ),
-
-              // Recent Activity
-              // Include your recent activity widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Recent Activity',
-                icon: Icons.history,
-              ),
-
-              // Promotions or Announcements
-              // Include your promotions or announcements widget here
-              // Replace PlaceholderWidget() with your actual widget
-              CardWidget(
-                title: 'Promotions or Announcements',
-                icon: Icons.announcement,
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
+
+  String _getUserName(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['name'];
+    }
+    return 'Guest';
+  }
 }
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends StatefulWidget {
   final String title;
   final IconData icon;
 
   CardWidget({required this.title, required this.icon});
 
+  @override
+  State<CardWidget> createState() => _CardWidgetState();
+}
+
+class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -215,10 +132,10 @@ class CardWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Icon(icon, size: 40.0, color: Colors.blue),
+              Icon(widget.icon, size: 40.0, color: Colors.blue),
               SizedBox(height: 8.0),
               Text(
-                title,
+                widget.title,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],

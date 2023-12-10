@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main/servises/database.dart';
 import '../models/user.dart';
 import 'dart:async';
 
@@ -13,7 +14,7 @@ class AuthService {
     return user != null ? CustomUser(uid: user.uid) : null;
   }
 
-  // Sign anonymously
+  // Sign in anonymously
   Future<CustomUser?> signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
@@ -24,12 +25,31 @@ class AuthService {
     }
   }
 
-  // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  // Sign in with email and password
+  Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
+      return user;
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+  // register with email and password
+  Future registerWithEmailAndPassword(
+      String email, String password, String name, String phone) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User user = result.user!;
+
+      // Create a new document for the  user with the uid
+      await DatabaseService(uid: user.uid).updateUserData(name, phone, email);
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());

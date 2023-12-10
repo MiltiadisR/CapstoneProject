@@ -1,69 +1,92 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:main/servises/auth.dart';
+import 'package:main/servises/database.dart';
+import 'package:provider/provider.dart';
 
 class Profile_View extends StatelessWidget {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Profile Picture
-            CircleAvatar(
-              radius: 120,
-              backgroundImage: AssetImage("images/Miltos.jpg"),
-            ),
-            SizedBox(height: 16.0),
+    return StreamProvider<QuerySnapshot?>.value(
+      value: DatabaseService(uid: '').members,
+      initialData: null,
+      child: Scaffold(
+        body: Consumer<QuerySnapshot?>(
+          builder: (context, members, _) {
+            if (members == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-            // User Information
-            buildSectionTitle('User Information'),
-            buildInfoTile('Name', 'John Doe'),
-            buildInfoTile('Email', 'john.doe@example.com'),
-            // Add more user information fields as needed
+            String userName = _getUserName(members);
+            String userphone = _getphonenumber(members);
+            String useremail = _getemail(members);
 
-            // Contact Information
-            buildSectionTitle('Contact Information'),
-            buildEditableInfoTile('Phone Number', '123-456-7890'),
-            buildEditableInfoTile('Address', '123 Main St, City'),
-            // Add more contact information fields as needed
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Profile Picture
+                  CircleAvatar(
+                    radius: 120,
+                    backgroundImage: AssetImage("images/Miltos.jpg"),
+                  ),
+                  SizedBox(height: 16.0),
 
-            // Password Change
-            buildSectionTitle('Password Change'),
-            buildPasswordChangeTile(),
+                  // User Information
+                  buildSectionTitle('User Information'),
+                  buildInfoTile('Name', userName), // Use the retrieved name
+                  buildInfoTile('Email', useremail),
+                  // Add more user information fields as needed
 
-            // Notification Preferences
-            buildSectionTitle('Notification Preferences'),
-            buildNotificationPreferencesTile(),
+                  // Contact Information
+                  buildSectionTitle('Contact Information'),
+                  buildEditableInfoTile('Phone Number', userphone),
+                  buildEditableInfoTile('Address', '123 Main St, City'),
+                  // Add more contact information fields as needed
 
-            // Language Preferences
-            buildSectionTitle('Language Preferences'),
-            buildLanguagePreferencesTile(),
+                  // Password Change
+                  buildSectionTitle('Password Change'),
+                  buildPasswordChangeTile(),
 
-            // Connected Accounts
-            buildSectionTitle('Connected Accounts'),
-            buildConnectedAccountsTile(),
+                  // Notification Preferences
+                  buildSectionTitle('Notification Preferences'),
+                  buildNotificationPreferencesTile(),
 
-            // Activity History
-            buildSectionTitle('Activity History'),
-            buildActivityHistoryTile(),
+                  // Language Preferences
+                  buildSectionTitle('Language Preferences'),
+                  buildLanguagePreferencesTile(),
 
-            // Privacy Settings
-            buildSectionTitle('Privacy Settings'),
-            buildPrivacySettingsTile(),
+                  // Connected Accounts
+                  buildSectionTitle('Connected Accounts'),
+                  buildConnectedAccountsTile(),
 
-            // Feedback and Ratings
-            buildSectionTitle('Feedback and Ratings'),
-            buildFeedbackAndRatingsTile(),
+                  // Activity History
+                  buildSectionTitle('Activity History'),
+                  buildActivityHistoryTile(),
 
-            // Logout Option
-            buildSectionTitle('Logout Option'),
-            buildLogoutOptionTile(),
+                  // Privacy Settings
+                  buildSectionTitle('Privacy Settings'),
+                  buildPrivacySettingsTile(),
 
-            // Account Deactivation/Deletion
-            buildSectionTitle('Account Deactivation/Deletion'),
-            buildAccountDeactivationTile(),
-          ],
+                  // Feedback and Ratings
+                  buildSectionTitle('Feedback and Ratings'),
+                  buildFeedbackAndRatingsTile(),
+
+                  // Logout Option
+                  buildSectionTitle('Logout Option'),
+                  buildLogoutOptionTile(),
+
+                  // Account Deactivation/Deletion
+                  buildSectionTitle('Account Deactivation/Deletion'),
+                  buildAccountDeactivationTile(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -162,9 +185,17 @@ class Profile_View extends StatelessWidget {
 
   Widget buildLogoutOptionTile() {
     return ListTile(
-      title: Text('Logout'),
-      onTap: () {
-        // Handle logout
+      title: Row(
+        children: [
+          Icon(
+            Icons.person,
+            color: Colors.black,
+          ),
+          Text('Logout')
+        ],
+      ),
+      onTap: () async {
+        await _auth.signOut();
       },
     );
   }
@@ -176,5 +207,26 @@ class Profile_View extends StatelessWidget {
         // Handle account deactivation/deletion
       },
     );
+  }
+
+  String _getUserName(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['name'];
+    }
+    return 'Guest';
+  }
+
+  String _getphonenumber(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['phone'];
+    }
+    return 'Phone number';
+  }
+
+  String _getemail(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['email'];
+    }
+    return 'Email';
   }
 }

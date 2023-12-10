@@ -7,7 +7,6 @@ import 'package:main/servises/auth.dart';
 import 'package:provider/provider.dart';
 import 'screens/Wrapper.dart';
 import 'package:main/constants.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
