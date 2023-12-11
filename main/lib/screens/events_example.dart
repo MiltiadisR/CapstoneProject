@@ -348,7 +348,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                 weekendTextStyle: TextStyle(color: Color(0xFF858585)),
                 weekNumberTextStyle: TextStyle(color: Color(0xFF858585)),
                 markerDecoration: BoxDecoration(
-                    color: Color.fromARGB(255, 121, 126, 109),
+                    color: Color(0xFFB46617),
                     borderRadius: BorderRadius.circular(20)),
                 defaultTextStyle: TextStyle(color: Color(0xFFF5FBF4)),
 
