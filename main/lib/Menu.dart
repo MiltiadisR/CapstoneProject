@@ -9,6 +9,7 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF0C3b2E),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: Column(
@@ -63,14 +64,14 @@ class Menu extends StatelessWidget {
             Icon(
               icon,
               size: 30,
-              color: Colors.blue,
+              color: Color(0xFFF4FBF9),
             ),
             SizedBox(width: 20),
             Text(
               title,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black87,
+                color: Color(0xFFF4FBF9),
                 fontWeight: FontWeight.normal,
               ),
             ),

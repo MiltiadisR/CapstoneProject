@@ -12,6 +12,7 @@ class Profile_View extends StatelessWidget {
       value: DatabaseService(uid: '').members,
       initialData: null,
       child: Scaffold(
+        backgroundColor: Color(0xFF0C3b2E),
         body: Consumer<QuerySnapshot?>(
           builder: (context, members, _) {
             if (members == null) {
@@ -27,62 +28,94 @@ class Profile_View extends StatelessWidget {
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Profile Picture
                   CircleAvatar(
-                    radius: 120,
+                    radius: 80,
                     backgroundImage: AssetImage("images/Miltos.jpg"),
                   ),
                   SizedBox(height: 16.0),
 
                   // User Information
-                  buildSectionTitle('User Information'),
-                  buildInfoTile('Name', userName), // Use the retrieved name
-                  buildInfoTile('Email', useremail),
+                  Container(
+                    width: double.infinity, // Set the width based on your needs
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        buildSectionTitle('User Information'),
+                        buildInfoTile(
+                            'Name', userName), // Use the retrieved name
+                        buildInfoTile('Email', useremail),
+                      ],
+                    ),
+                  ),
                   // Add more user information fields as needed
 
                   // Contact Information
-                  buildSectionTitle('Contact Information'),
-                  buildEditableInfoTile('Phone Number', userphone),
-                  buildEditableInfoTile('Address', '123 Main St, City'),
+                  Container(
+                    width: double.infinity, // Set the width based on your needs
+                    padding: EdgeInsets.all(
+                        10.0), // Add padding inside the container
+                    decoration: BoxDecoration(
+                      color:
+                          Color(0xFF051908), // Set the desired background color
+                      borderRadius: BorderRadius.circular(
+                          16.0), // Set the radius for rounded edges
+                    ),
+                    child: Column(
+                      children: [
+                        buildSectionTitle('Contact Information'),
+                        buildEditableInfoTile('Phone Number', userphone),
+                        buildEditableInfoTile('Address', '123 Main St, City'),
+                      ],
+                    ),
+                  ),
                   // Add more contact information fields as needed
 
                   // Password Change
-                  buildSectionTitle('Password Change'),
-                  buildPasswordChangeTile(),
+                  Container(
+                    width: double.infinity, // Set the width based on your needs
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        buildSectionTitle('Password Change'),
+                        buildPasswordChangeTile(),
 
-                  // Notification Preferences
-                  buildSectionTitle('Notification Preferences'),
-                  buildNotificationPreferencesTile(),
+                        // Notification Preferences
+                        buildSectionTitle('Notification Preferences'),
+                        buildNotificationPreferencesTile(),
 
-                  // Language Preferences
-                  buildSectionTitle('Language Preferences'),
-                  buildLanguagePreferencesTile(),
+                        // Language Preferences
+                        buildSectionTitle('Language Preferences'),
+                        buildLanguagePreferencesTile(),
 
-                  // Connected Accounts
-                  buildSectionTitle('Connected Accounts'),
-                  buildConnectedAccountsTile(),
+                        // Connected Accounts
+                        buildSectionTitle('Connected Accounts'),
+                        buildConnectedAccountsTile(),
 
-                  // Activity History
-                  buildSectionTitle('Activity History'),
-                  buildActivityHistoryTile(),
+                        // Activity History
+                        buildSectionTitle('Activity History'),
+                        buildActivityHistoryTile(),
 
-                  // Privacy Settings
-                  buildSectionTitle('Privacy Settings'),
-                  buildPrivacySettingsTile(),
+                        // Privacy Settings
+                        buildSectionTitle('Privacy Settings'),
+                        buildPrivacySettingsTile(),
 
-                  // Feedback and Ratings
-                  buildSectionTitle('Feedback and Ratings'),
-                  buildFeedbackAndRatingsTile(),
+                        // Feedback and Ratings
+                        buildSectionTitle('Feedback and Ratings'),
+                        buildFeedbackAndRatingsTile(),
 
-                  // Logout Option
-                  buildSectionTitle('Logout Option'),
-                  buildLogoutOptionTile(),
+                        // Logout Option
+                        buildSectionTitle('Logout Option'),
+                        buildLogoutOptionTile(),
 
-                  // Account Deactivation/Deletion
-                  buildSectionTitle('Account Deactivation/Deletion'),
-                  buildAccountDeactivationTile(),
+                        // Account Deactivation/Deletion
+                        buildSectionTitle('Account Deactivation/Deletion'),
+                        buildAccountDeactivationTile(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
@@ -97,23 +130,44 @@ class Profile_View extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFF4FBF9)),
       ),
     );
   }
 
   Widget buildInfoTile(String label, String value) {
     return ListTile(
-      title: Text(label),
-      subtitle: Text(value),
+      title: Text(
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
     );
   }
 
   Widget buildEditableInfoTile(String label, String value) {
     return ListTile(
-      title: Text(label),
-      subtitle: Text(value),
-      trailing: Icon(Icons.edit),
+      title: Text(
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
+      trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
       onTap: () {
         // Handle editing
       },
@@ -122,7 +176,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildPasswordChangeTile() {
     return ListTile(
-      title: Text('Change Password'),
+      title: Text(
+        'Change Password',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle password change
       },
@@ -131,7 +191,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildNotificationPreferencesTile() {
     return ListTile(
-      title: Text('Notification Preferences'),
+      title: Text(
+        'Notification Preferences',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle notification preferences
       },
@@ -140,7 +206,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildLanguagePreferencesTile() {
     return ListTile(
-      title: Text('Language Preferences'),
+      title: Text(
+        'Language Preferences',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle language preferences
       },
@@ -149,7 +221,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildConnectedAccountsTile() {
     return ListTile(
-      title: Text('Connected Accounts'),
+      title: Text(
+        'Connected Accounts',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle connected accounts
       },
@@ -158,7 +236,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildActivityHistoryTile() {
     return ListTile(
-      title: Text('Activity History'),
+      title: Text(
+        'Activity History',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle activity history
       },
@@ -167,7 +251,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildPrivacySettingsTile() {
     return ListTile(
-      title: Text('Privacy Settings'),
+      title: Text(
+        'Privacy Settings',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle privacy settings
       },
@@ -176,7 +266,13 @@ class Profile_View extends StatelessWidget {
 
   Widget buildFeedbackAndRatingsTile() {
     return ListTile(
-      title: Text('Feedback and Ratings'),
+      title: Text(
+        'Feedback and Ratings',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
         // Handle feedback and ratings
       },
@@ -189,9 +285,19 @@ class Profile_View extends StatelessWidget {
         children: [
           Icon(
             Icons.person,
-            color: Colors.black,
+            color: Color(0xFFF4FBF9),
+            size: 30,
           ),
-          Text('Logout')
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            'Logout',
+            style: TextStyle(
+              color: Color(0xFFF4FBF9),
+              fontSize: 20,
+            ),
+          )
         ],
       ),
       onTap: () async {
@@ -202,7 +308,11 @@ class Profile_View extends StatelessWidget {
 
   Widget buildAccountDeactivationTile() {
     return ListTile(
-      title: Text('Deactivate/Delete Account'),
+      title: Text('Deactivate/Delete Account',
+          style: TextStyle(
+            color: Color(0xFFF4FBF9),
+            fontSize: 20,
+          )),
       onTap: () {
         // Handle account deactivation/deletion
       },

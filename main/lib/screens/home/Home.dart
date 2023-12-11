@@ -19,6 +19,7 @@ class _Home_PageState extends State<Home> {
       value: DatabaseService(uid: '').members,
       initialData: null,
       child: Scaffold(
+        backgroundColor: Color(0xFF0C3b2E),
         body: Consumer<QuerySnapshot?>(
           builder: (context, members, _) {
             if (members == null) {
@@ -38,8 +39,10 @@ class _Home_PageState extends State<Home> {
                     // Personalized Greetings
                     Text(
                       'Hi, $userName!',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFF4FBF9)),
                     ),
                     SizedBox(height: 16.0),
 
@@ -81,13 +84,10 @@ class _Home_PageState extends State<Home> {
                     // Other Card Widgets
                     CardWidget(
                         title: 'Notifications', icon: Icons.notifications),
-                    CardWidget(title: 'Search Bar', icon: Icons.search),
-                    CardWidget(title: 'Featured Content', icon: Icons.star),
-                    CardWidget(title: 'Recent Activity', icon: Icons.history),
-                    CardWidget(
-                      title: 'Promotions or Announcements',
-                      icon: Icons.announcement,
-                    ),
+                    // CardWidget(title: 'Search Bar', icon: Icons.search),
+                    // CardWidget(title: 'Featured Content', icon: Icons.star),
+                    // CardWidget(title: 'Recent Activity', icon: Icons.history),
+                    // CardWidget(title: 'Promotions or Announcements',icon: Icons.announcement,),
                   ],
                 ),
               ),

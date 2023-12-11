@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/screens/Authenticate/forgetpassword/build_showmodalsheet.dart';
 import 'package:main/servises/auth.dart';
 import 'package:main/shared/constants.dart';
 import 'package:main/shared/loading.dart';
@@ -27,18 +28,33 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
+            backgroundColor: Color(0xFF0C3b2E),
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Color(0xFFF5FBF4),
               elevation: 0.0,
-              title: Text("Sign in"),
+              title: Text(
+                "Sign in",
+                style: TextStyle(color: Color(0xFFacbdaa)),
+              ),
               actions: [
                 ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color(0xFFA3AB92))),
                     onPressed: () {
                       widget.toggleView(); // Call toggleView function
                     },
                     child: Row(
-                      children: [Icon(Icons.person), Text('Register')],
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Register',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
                     ))
               ],
             ),
@@ -54,8 +70,10 @@ class _SignInState extends State<SignIn> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Email',
-                          ),
+                              hintText: 'Email',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.person_outline_outlined,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) =>
                               val!.isEmpty ? 'Enter an email' : null,
                           onChanged: (val) {
@@ -67,8 +85,10 @@ class _SignInState extends State<SignIn> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Password',
-                          ),
+                              hintText: 'Password',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.fingerprint,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) => val!.length < 6
                               ? 'Enter a password 6+ characters long'
                               : null,
@@ -76,6 +96,19 @@ class _SignInState extends State<SignIn> {
                           onChanged: (val) {
                             setState(() => password = val);
                           },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              onPressed: () {
+                                ForgetPasswordScreen.buildshowmodalbottomsheet(
+                                    context);
+                              },
+                              child: Text('Forget Password?',
+                                  style: TextStyle(color: Color(0xFF1e2d4c)))),
                         ),
                         SizedBox(
                           height: 20,
@@ -101,9 +134,8 @@ class _SignInState extends State<SignIn> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.pink), // Change to the desired color
-                          ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xFFA3AB92))),
                         ),
                         SizedBox(
                           height: 12,
@@ -117,6 +149,7 @@ class _SignInState extends State<SignIn> {
           );
   }
 }
+
 
 
 

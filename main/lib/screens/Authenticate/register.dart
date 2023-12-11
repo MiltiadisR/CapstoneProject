@@ -29,18 +29,27 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
+            backgroundColor: Color(0xFF0C3b2E),
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Color(0xFFF5FBF4),
               elevation: 0.0,
-              title: Text("Sign up"),
+              title: Text(
+                "Sign up",
+                style: TextStyle(color: Color(0xFFacbdaa)),
+              ),
               actions: [
                 ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color(0xFFA3AB92))),
                     onPressed: () {
                       widget.toggleView(); // Call toggleView function
                     },
                     child: Row(
-                      children: [Icon(Icons.person), Text('Sign in')],
+                      children: [
+                        Icon(Icons.person, color: Colors.white),
+                        Text('Sign in', style: TextStyle(color: Colors.white))
+                      ],
                     ))
               ],
             ),
@@ -56,8 +65,10 @@ class _RegisterState extends State<Register> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Name',
-                          ),
+                              hintText: 'Name',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.person_outline_rounded,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) =>
                               val!.isEmpty ? 'Enter a name' : null,
                           onChanged: (val) {
@@ -69,8 +80,10 @@ class _RegisterState extends State<Register> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Email',
-                          ),
+                              hintText: 'Email',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.email_outlined,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) =>
                               val!.isEmpty ? 'Enter an email' : null,
                           onChanged: (val) {
@@ -82,8 +95,10 @@ class _RegisterState extends State<Register> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Phone number',
-                          ),
+                              hintText: 'Phone number',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.numbers,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) => val!.length < 10
                               ? 'Enter a valid phone number'
                               : null,
@@ -96,8 +111,10 @@ class _RegisterState extends State<Register> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
-                            hintText: 'Password',
-                          ),
+                              hintText: 'Password',
+                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                              prefixIcon: Icon(Icons.fingerprint,
+                                  color: Color(0xFF1e2d4c))),
                           validator: (val) => val!.length < 6
                               ? 'Enter a password 6+ characters long'
                               : null,
@@ -130,9 +147,8 @@ class _RegisterState extends State<Register> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.pink), // Change to the desired color
-                          ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xFFA3AB92))),
                         ),
                         SizedBox(
                           height: 12,

@@ -42,16 +42,27 @@ class _MyAppExtentionState extends State<MyAppExtention> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF0C3b2E),
       appBar: AppBar(
+        backgroundColor: Color(0xFFF5FBF4),
         title: currentIndex == 0
-            ? Text("Home")
+            ? Text("Home",
+                style: TextStyle(
+                  color: Color(0xFFacbdaa),
+                ))
             : currentIndex == 1
-                ? Text("Calendar")
+                ? Text("Calendar", style: TextStyle(color: Color(0xFFacbdaa)))
                 : currentIndex == 2
-                    ? Text("Profile")
-                    : Text("Menu"),
+                    ? Text("Profile",
+                        style: TextStyle(
+                            color: Color(0xFFacbdaa),
+                            fontWeight: FontWeight.bold))
+                    : Text("Menu", style: TextStyle(color: Color(0xFFacbdaa))),
         actions: [
           ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Color(0xFFA3AB92))),
             onPressed: () async {
               await _auth.signOut();
             },
@@ -59,9 +70,12 @@ class _MyAppExtentionState extends State<MyAppExtention> {
               children: [
                 Icon(
                   Icons.person,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
-                Text('Logout')
+                Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                )
               ],
             ),
           ),
@@ -80,14 +94,17 @@ class _MyAppExtentionState extends State<MyAppExtention> {
             .fixed, // you need this for more than 3 items
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home, color: Color(0xFF1e2d4c)),
             label: "Home",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: "Calendar"),
+              icon: Icon(Icons.calendar_month, color: Color(0xFF1e2d4c)),
+              label: "Calendar"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
+              icon: Icon(Icons.person_outlined, color: Color(0xFF1e2d4c)),
+              label: "Profile"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.menu, color: Color(0xFF1e2d4c)), label: "Menu"),
         ],
         currentIndex: currentIndex,
         onTap: (int index) {

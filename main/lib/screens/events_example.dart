@@ -247,6 +247,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     // Check if the start date matches the selected day
     if (startDate == formatDate(_selectedDay.toString())) {
       return Card(
+        color: Color(0xFFF4FBF9),
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -308,35 +309,64 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF0C3b2E),
       body: Column(
         children: [
-          TableCalendar<Event>(
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
-            rangeSelectionMode: _rangeSelectionMode,
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
-              outsideDaysVisible: false,
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: double.infinity, // Set the width based on your needs
+            padding: EdgeInsets.all(10.0), // Add padding inside the container
+            decoration: BoxDecoration(
+              color: Color(0xFF051908), // Set the desired background color
+              borderRadius: BorderRadius.circular(
+                  16.0), // Set the radius for rounded edges
             ),
-            onDaySelected: _onDaySelected,
-            onRangeSelected: _onRangeSelected,
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
+            child: TableCalendar<Event>(
+              daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: Color(0xFFF5FBF4))),
+              headerStyle: HeaderStyle(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF5FBF4),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  headerMargin: EdgeInsets.only(bottom: 10),
+                  headerPadding: EdgeInsets.all(1)),
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              rangeStartDay: _rangeStart,
+              rangeEndDay: _rangeEnd,
+              calendarFormat: _calendarFormat,
+              rangeSelectionMode: _rangeSelectionMode,
+              eventLoader: _getEventsForDay,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarStyle: CalendarStyle(
+                // Use `CalendarStyle` to customize the UI
+                weekendTextStyle: TextStyle(color: Color(0xFF858585)),
+                weekNumberTextStyle: TextStyle(color: Color(0xFF858585)),
+                markerDecoration: BoxDecoration(
+                    color: Color.fromARGB(255, 121, 126, 109),
+                    borderRadius: BorderRadius.circular(20)),
+                defaultTextStyle: TextStyle(color: Color(0xFFF5FBF4)),
+
+                outsideDaysVisible: false,
+              ),
+              onDaySelected: _onDaySelected,
+              onRangeSelected: _onRangeSelected,
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
+            ),
           ),
           const SizedBox(height: 8.0),
           Expanded(
