@@ -26,6 +26,7 @@ class _RegisterState extends State<Register> {
   String error = '';
   String phone = '';
   String name = '';
+  String imageurl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +145,7 @@ class _RegisterState extends State<Register> {
                               });
                               dynamic result =
                                   await _auth.registerWithEmailAndPassword(
-                                      email, password, name, phone);
+                                      email, password, name, phone, imageurl);
                               if (result == null) {
                                 setState(() {
                                   loading = false;

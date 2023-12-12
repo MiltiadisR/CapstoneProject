@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/servises/auth.dart';
@@ -6,6 +9,9 @@ import 'package:provider/provider.dart';
 
 class Profile_View extends StatelessWidget {
   final AuthService _auth = AuthService();
+  final CollectionReference _items =
+      FirebaseFirestore.instance.collection('userimages');
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<QuerySnapshot?>.value(
@@ -25,6 +31,7 @@ class Profile_View extends StatelessWidget {
             String userphone = _getphonenumber(members);
             String useremail = _getemail(members);
             String userpassword = _getUserpassword(members);
+            String imageurl = _getimageurl(members);
 
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -32,21 +39,17 @@ class Profile_View extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Profile Picture
-                  CircleAvatar(
-                    radius: 80,
-                    backgroundImage: AssetImage("images/Miltos.jpg"),
-                  ),
+                  buildProfilePicture(context, members),
                   SizedBox(height: 16.0),
 
                   // User Information
                   Container(
-                    width: double.infinity, // Set the width based on your needs
+                    width: double.infinity,
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         buildSectionTitle('User Information'),
-                        buildInfoTile(
-                            'Name', userName), // Use the retrieved name
+                        buildInfoTile('Name', userName),
                         buildInfoTile('Email', useremail),
                       ],
                     ),
@@ -55,14 +58,11 @@ class Profile_View extends StatelessWidget {
 
                   // Contact Information
                   Container(
-                    width: double.infinity, // Set the width based on your needs
-                    padding: EdgeInsets.all(
-                        10.0), // Add padding inside the container
+                    width: double.infinity,
+                    padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color:
-                          Color(0xFF051908), // Set the desired background color
-                      borderRadius: BorderRadius.circular(
-                          16.0), // Set the radius for rounded edges
+                      color: Color(0xFF051908),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Column(
                       children: [
@@ -76,12 +76,13 @@ class Profile_View extends StatelessWidget {
 
                   // Password Change
                   Container(
-                    width: double.infinity, // Set the width based on your needs
+                    width: double.infinity,
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         buildSectionTitle('Change Password'),
-                        buildPasswordChangeTile('Password', '••••••••'),
+                        buildPasswordChangeTile(
+                            'Password', '••••••••' + userpassword),
 
                         // Notification Preferences
                         buildSectionTitle('Notification Preferences'),
@@ -325,6 +326,70 @@ class Profile_View extends StatelessWidget {
     );
   }
 
+  Widget buildProfilePicture(BuildContext context, QuerySnapshot members) {
+    String imageurl = _getimageurl(members);
+
+    return GestureDetector(
+      onTap: () {
+        if (imageurl.isEmpty) {
+          // Pass the context to _uploadImage method
+          _uploadImage(context);
+        }
+      },
+      child: CircleAvatar(
+        radius: 80,
+        backgroundImage: imageurl.isNotEmpty
+            ? NetworkImage(imageurl)
+            : null, // Set to null when imageurl is empty
+        child: imageurl.isEmpty ? Icon(Icons.add, size: 40) : null,
+      ),
+    );
+  }
+
+  Future<void> _uploadImage(BuildContext context) async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        final imageFile = File(pickedFile.path);
+
+        // Check if the picked file is an image
+        if (!['jpg', 'jpeg', 'png'].contains(pickedFile.path.split('.').last)) {
+          throw Exception('Invalid file format. Please choose an image.');
+        }
+
+        final userId = _auth.getCurrentUserId();
+        final storageRef =
+            FirebaseStorage.instance.ref().child('userimages/$userId.jpg');
+        print(storageRef);
+
+        // Upload the image file
+        await storageRef.putFile(imageFile);
+
+        // Get the download URL of the uploaded image
+        final imageUrl = await storageRef.getDownloadURL();
+
+        // Update Firestore with the download URL
+        FirebaseFirestore.instance
+            .collection('userimages')
+            .doc(userId)
+            .update({'imageurl': imageUrl});
+
+        // Refresh the UI or fetch new data
+        Provider.of<DatabaseService>(context, listen: false).updateUserData;
+      }
+    } catch (error) {
+      // Handle and display the error, e.g., show a SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   String _getUserName(QuerySnapshot members) {
     if (members.docs.isNotEmpty) {
       return members.docs[0]['name'];
@@ -351,5 +416,12 @@ class Profile_View extends StatelessWidget {
       return members.docs[0]['email'];
     }
     return 'Email';
+  }
+
+  String _getimageurl(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['imageurl'];
+    }
+    return '';
   }
 }

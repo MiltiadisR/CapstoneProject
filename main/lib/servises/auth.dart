@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:main/servises/database.dart';
 import '../models/user.dart';
 import 'dart:async';
@@ -12,6 +14,11 @@ class AuthService {
 
   CustomUser? _userFromFirebaseUser(User? user) {
     return user != null ? CustomUser(uid: user.uid) : null;
+  }
+
+  String getCurrentUserId() {
+    User? user = _auth.currentUser;
+    return user?.uid ?? '';
   }
 
   // Sign in anonymously
@@ -39,8 +46,8 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(
-      String email, String password, String name, String phone) async {
+  Future registerWithEmailAndPassword(String email, String password,
+      String name, String phone, String imageurl) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -50,11 +57,20 @@ class AuthService {
 
       // Create a new document for the  user with the uid
       await DatabaseService(uid: user.uid)
-          .updateUserData(name, phone, email, password);
+          .updateUserData(name, phone, email, password, imageurl)
+          .whenComplete(
+            () => Get.snackbar('Success', 'Your account has been created',
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green.withOpacity(0.1),
+                colorText: Colors.green),
+          );
       return _userFromFirebaseUser(user);
-    } catch (error) {
+    } catch (error, StackTrace) {
+      Get.snackbar('Error', 'Something went wrong. Try again',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.red);
       print(error.toString());
-      return null;
     }
   }
 
