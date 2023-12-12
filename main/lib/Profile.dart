@@ -24,6 +24,7 @@ class Profile_View extends StatelessWidget {
             String userName = _getUserName(members);
             String userphone = _getphonenumber(members);
             String useremail = _getemail(members);
+            String userpassword = _getUserpassword(members);
 
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -79,8 +80,8 @@ class Profile_View extends StatelessWidget {
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        buildSectionTitle('Password Change'),
-                        buildPasswordChangeTile(),
+                        buildSectionTitle('Change Password'),
+                        buildPasswordChangeTile('Password', '••••••••'),
 
                         // Notification Preferences
                         buildSectionTitle('Notification Preferences'),
@@ -174,17 +175,22 @@ class Profile_View extends StatelessWidget {
     );
   }
 
-  Widget buildPasswordChangeTile() {
+  Widget buildPasswordChangeTile(String label, String value) {
     return ListTile(
       title: Text(
-        'Change Password',
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
         style: TextStyle(
           color: Color(0xFFF4FBF9),
           fontSize: 20,
         ),
       ),
+      trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
       onTap: () {
-        // Handle password change
+        // Handle editing
       },
     );
   }
@@ -324,6 +330,13 @@ class Profile_View extends StatelessWidget {
       return members.docs[0]['name'];
     }
     return 'Guest';
+  }
+
+  String _getUserpassword(QuerySnapshot members) {
+    if (members.docs.isNotEmpty) {
+      return members.docs[0]['password'];
+    }
+    return 'password';
   }
 
   String _getphonenumber(QuerySnapshot members) {

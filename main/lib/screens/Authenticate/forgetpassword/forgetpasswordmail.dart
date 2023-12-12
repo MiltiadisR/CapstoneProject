@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:main/screens/Authenticate/forgetpassword/forget_password_otp.dart";
 import "package:main/shared/constants.dart";
 
 class ForgetPasswordmailScreen extends StatelessWidget {
@@ -27,8 +28,15 @@ class ForgetPasswordmailScreen extends StatelessWidget {
                   ),
                   SizedBox(
                       width: double.infinity,
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text('Next')))
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => OTPScreen(),
+                              ),
+                            );
+                          },
+                          child: Text('Next')))
                 ],
               ))
             ],

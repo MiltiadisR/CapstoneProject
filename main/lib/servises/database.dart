@@ -13,11 +13,13 @@ class DatabaseService {
     String name,
     String phone,
     String email,
+    String password,
   ) async {
     await testCollection.doc(uid).set({
       'name': name,
       'phone': phone,
       'email': email,
+      'password': password,
     });
   }
 

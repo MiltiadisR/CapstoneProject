@@ -186,18 +186,21 @@ class _TestIcalState extends State<TestIcal> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () async {
-              List<String> jsonDataList = await Future.wait(_icalDataList);
-              allEvents.clear(); // Clear the list before applying the filter
-              allEvents.addAll(getAllEvents(jsonDataList));
-              print(allEvents);
-            },
-            child: Text('Print Events'),
-          ),
+          //ElevatedButton(
+          //onPressed: () async {
+          //List<String> jsonDataList = await Future.wait(_icalDataList);
+          //allEvents.clear(); // Clear the list before applying the filter
+          //allEvents.addAll(getAllEvents(jsonDataList));
+          //print(allEvents);
+          //},
+          //child: Text('Print Events'),
+          //),
           DropdownButton<String>(
             value: propertyFilter,
-            hint: Text('Select Property'),
+            hint: Text(
+              'Select Property',
+              style: TextStyle(color: Color(0xFFF5FBF4)),
+            ),
             onChanged: (String? newValue) {
               print("Selected Property: $newValue");
               setState(() {
@@ -239,11 +242,24 @@ class _TestIcalState extends State<TestIcal> {
                   List<String> jsonDataList = snapshot.data ?? [];
                   allEvents = getAllEvents(jsonDataList);
 
-                  return ListView.builder(
-                    itemCount: allEvents.length,
-                    itemBuilder: (context, index) {
-                      return buildEventWidget(allEvents[index]);
-                    },
+                  return Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.all(
+                        10.0), // Set the width based on your needs
+                    padding: EdgeInsets.all(
+                        10.0), // Add padding inside the container
+                    decoration: BoxDecoration(
+                      color:
+                          Color(0xFFF5FBF4), // Set the desired background color
+                      borderRadius: BorderRadius.circular(
+                          16.0), // Set the radius for rounded edges
+                    ),
+                    child: ListView.builder(
+                      itemCount: allEvents.length,
+                      itemBuilder: (context, index) {
+                        return buildEventWidget(allEvents[index]);
+                      },
+                    ),
                   );
                 }
               },

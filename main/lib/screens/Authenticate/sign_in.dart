@@ -58,94 +58,98 @@ class _SignInState extends State<SignIn> {
                     ))
               ],
             ),
-            body: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                child: Form(
-                    key: _formkey,
-                    child: Column(
-                        children: List.of(
-                      [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Email',
-                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
-                              prefixIcon: Icon(Icons.person_outline_outlined,
-                                  color: Color(0xFF1e2d4c))),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter an email' : null,
-                          onChanged: (val) {
-                            setState(() => email = val);
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Password',
-                              hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
-                              prefixIcon: Icon(Icons.fingerprint,
-                                  color: Color(0xFF1e2d4c))),
-                          validator: (val) => val!.length < 6
-                              ? 'Enter a password 6+ characters long'
-                              : null,
-                          obscureText: true,
-                          onChanged: (val) {
-                            setState(() => password = val);
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                              onPressed: () {
-                                ForgetPasswordScreen.buildshowmodalbottomsheet(
-                                    context);
-                              },
-                              child: Text('Forget Password?',
-                                  style: TextStyle(color: Color(0xFF1e2d4c)))),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (_formkey.currentState!.validate()) ;
-                            setState(() {
-                              loading = true;
-                            });
-                            dynamic result = await _auth
-                                .signInWithEmailAndPassword(email, password);
-                            if (result == null) {
-                              setState(() {
-                                error =
-                                    'Could not sigh in with those credentials';
-                                loading = false;
-                              });
-                            }
-                          },
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(color: Colors.white),
+            body: SingleChildScrollView(
+              child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                  child: Form(
+                      key: _formkey,
+                      child: Column(
+                          children: List.of(
+                        [
+                          SizedBox(
+                            height: 20,
                           ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFA3AB92))),
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        )
-                      ],
-                    )))),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Email',
+                                hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                                prefixIcon: Icon(Icons.person_outline_outlined,
+                                    color: Color(0xFF1e2d4c))),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Enter an email' : null,
+                            onChanged: (val) {
+                              setState(() => email = val);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Password',
+                                hintStyle: TextStyle(color: Color(0xFF1e2d4c)),
+                                prefixIcon: Icon(Icons.fingerprint,
+                                    color: Color(0xFF1e2d4c))),
+                            validator: (val) => val!.length < 6
+                                ? 'Enter a password 6+ characters long'
+                                : null,
+                            obscureText: true,
+                            onChanged: (val) {
+                              setState(() => password = val);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                                onPressed: () {
+                                  ForgetPasswordScreen
+                                      .buildshowmodalbottomsheet(context);
+                                },
+                                child: Text('Forget Password?',
+                                    style:
+                                        TextStyle(color: Color(0xFFacbdaa)))),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_formkey.currentState!.validate()) ;
+                              setState(() {
+                                loading = true;
+                              });
+                              dynamic result = await _auth
+                                  .signInWithEmailAndPassword(email, password);
+                              if (result == null) {
+                                setState(() {
+                                  error =
+                                      'Could not sigh in with those credentials';
+                                  loading = false;
+                                });
+                              }
+                            },
+                            child: Text(
+                              'Sign in',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color(0xFFA3AB92))),
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            error,
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          )
+                        ],
+                      )))),
+            ),
           );
   }
 }

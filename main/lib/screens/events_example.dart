@@ -172,7 +172,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/9a1fa378-688a-4a6a-b518-36c2c9f033a0",
       "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/1b0fc415-098a-4928-a976-78c923b6f4a4",
       "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/e2fc4710-dc42-4650-96c9-73002628d51e",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/fb0d170e-d7b5-415c-8ecf-e90a04971b50"
+      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/fb0d170e-d7b5-415c-8ecf-e90a04971b50",
     ];
   }
 

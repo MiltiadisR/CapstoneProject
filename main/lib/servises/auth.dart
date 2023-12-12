@@ -49,11 +49,35 @@ class AuthService {
       User user = result.user!;
 
       // Create a new document for the  user with the uid
-      await DatabaseService(uid: user.uid).updateUserData(name, phone, email);
+      await DatabaseService(uid: user.uid)
+          .updateUserData(name, phone, email, password);
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());
       return null;
+    }
+  }
+
+  //Update Password
+  Future<void> updatePassword(String oldPassword, String newPassword) async {
+    try {
+      User? currentUser = _auth.currentUser;
+
+      if (currentUser != null) {
+        // Reauthenticate the user with their current password
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: currentUser.email!,
+          password: oldPassword,
+        );
+
+        await currentUser.reauthenticateWithCredential(credential);
+
+        // Update the password
+        await currentUser.updatePassword(newPassword);
+      }
+    } catch (error) {
+      print(error.toString());
+      throw error;
     }
   }
 
