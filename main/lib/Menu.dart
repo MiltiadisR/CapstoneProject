@@ -20,8 +20,7 @@ class Menu extends StatelessWidget {
               title: "Settings",
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const Settings_View()),
+                  MaterialPageRoute(builder: (context) => Settings_View()),
                 );
               },
             ),

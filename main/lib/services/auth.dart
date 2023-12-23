@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main/servises/database.dart';
+import 'package:main/services/database.dart';
 import '../models/user.dart';
 import 'dart:async';
 
@@ -113,6 +114,59 @@ class AuthService {
       CustomUser? customUser = _userFromFirebaseUser(user);
       _userController.add(customUser);
     });
+  }
+
+  Future<List<String>> getIcalLinks() async {
+    try {
+      String userId = getCurrentUserId();
+      DocumentSnapshot document = await FirebaseFirestore.instance
+          .collection('icalLinks')
+          .doc(userId)
+          .get();
+
+      if (document.exists) {
+        final data = document.data() as Map<String, dynamic>?;
+
+        if (data != null) {
+          final icalLinksRaw = data['icalLinks'];
+
+          if (icalLinksRaw is List<dynamic>) {
+            List<String> icalLinks =
+                List<String>.from(icalLinksRaw.cast<String>());
+            return icalLinks;
+          }
+        }
+      }
+
+      return [];
+    } catch (error) {
+      print('Error getting iCal links: $error');
+      return [];
+    }
+  }
+
+  // Delete account
+  Future<void> deleteAccount() async {
+    try {
+      User? currentUser = _auth.currentUser;
+
+      if (currentUser != null) {
+        // Delete user document in Firestore
+        await DatabaseService(uid: currentUser.uid).deleteUserData();
+
+        // Delete user account
+        await currentUser.delete();
+
+        // Sign out the user
+        await _auth.signOut();
+
+        // Inform listeners about the user being null (signed out)
+        _userController.add(null);
+      }
+    } catch (error) {
+      print('Error deleting account: $error');
+      throw error;
+    }
   }
 
   // Dispose of the stream controller when done

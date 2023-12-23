@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:main/servises/auth.dart';
+import 'package:main/services/auth.dart';
 import 'Profile.dart';
 import 'Calendar_View.dart';
 import 'Menu.dart';

@@ -28,4 +28,13 @@ class DatabaseService {
   Stream<QuerySnapshot> get members {
     return testCollection.snapshots();
   }
+
+  Future<void> deleteUserData() async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+    } catch (error) {
+      print('Error deleting user data: $error');
+      throw error;
+    }
+  }
 }

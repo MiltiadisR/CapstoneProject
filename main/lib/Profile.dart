@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:main/servises/auth.dart';
-import 'package:main/servises/database.dart';
+import 'package:main/services/auth.dart';
+import 'package:main/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Profile_View extends StatelessWidget {
@@ -114,7 +115,7 @@ class Profile_View extends StatelessWidget {
 
                         // Account Deactivation/Deletion
                         buildSectionTitle('Account Deactivation/Deletion'),
-                        buildAccountDeactivationTile(),
+                        buildAccountDeactivationTile(context),
                       ],
                     ),
                   ),
@@ -313,15 +314,43 @@ class Profile_View extends StatelessWidget {
     );
   }
 
-  Widget buildAccountDeactivationTile() {
+  Widget buildAccountDeactivationTile(BuildContext context) {
     return ListTile(
-      title: Text('Deactivate/Delete Account',
-          style: TextStyle(
-            color: Color(0xFFF4FBF9),
-            fontSize: 20,
-          )),
+      title: Text(
+        'Deactivate/Delete Account',
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
       onTap: () {
-        // Handle account deactivation/deletion
+        showDeactivationConfirmationDialog(context);
+      },
+    );
+  }
+
+  Future<void> showDeactivationConfirmationDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Account Deactivation'),
+          content:
+              Text('Are you sure you want to deactivate/delete your account?'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Perform the account deactivation/deletion logic here
+
+                DatabaseService(uid: '').deleteUserData();
+
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
       },
     );
   }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Load_data.dart';
 import 'package:main/Reservation_Details.dart';
-import '../../servises/database.dart';
+import '../../services/database.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
