@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:main/services/auth.dart';
 import 'package:main/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile_View extends StatelessWidget {
   final AuthService _auth = AuthService();
-  final CollectionReference _items =
-      FirebaseFirestore.instance.collection('userimages');
 
   @override
   Widget build(BuildContext context) {
@@ -358,20 +356,43 @@ class Profile_View extends StatelessWidget {
   Widget buildProfilePicture(BuildContext context, QuerySnapshot members) {
     String imageurl = _getimageurl(members);
 
-    return GestureDetector(
-      onTap: () {
-        if (imageurl.isEmpty) {
-          // Pass the context to _uploadImage method
-          _uploadImage(context);
-        }
-      },
-      child: CircleAvatar(
-        radius: 80,
-        backgroundImage: imageurl.isNotEmpty
-            ? NetworkImage(imageurl)
-            : null, // Set to null when imageurl is empty
-        child: imageurl.isEmpty ? Icon(Icons.add, size: 40) : null,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (imageurl.isEmpty) {
+              // Pass the context to _uploadImage method
+              _uploadImage(context);
+            }
+          },
+          child: CircleAvatar(
+            radius: 80,
+            backgroundImage: imageurl.isNotEmpty
+                ? CachedNetworkImageProvider(imageurl)
+                : null, // Set to null when imageurl is empty
+            child: imageurl.isEmpty ? Icon(Icons.add, size: 40) : null,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        GestureDetector(
+            onTap: () {
+              if (imageurl.isNotEmpty) {
+                // Pass the context to _uploadImage method
+                _uploadImage(context);
+              }
+            },
+            // Set to null when imageurl is empty
+            child: imageurl.isNotEmpty
+                ? Text("Change Profile Picture",
+                    style: TextStyle(
+                      color: Color(0xFFF4FBF9),
+                      fontSize: 15,
+                    ))
+                : null),
+      ],
     );
   }
 
@@ -384,29 +405,39 @@ class Profile_View extends StatelessWidget {
         final imageFile = File(pickedFile.path);
 
         // Check if the picked file is an image
-        if (!['jpg', 'jpeg', 'png'].contains(pickedFile.path.split('.').last)) {
+        // Check if the picked file is an image
+        final allowedExtensions = ['jpg', 'jpeg', 'png'];
+        final fileExtension = pickedFile.path.split('.').last.toLowerCase();
+
+        if (!allowedExtensions.contains(fileExtension)) {
           throw Exception('Invalid file format. Please choose an image.');
         }
 
         final userId = _auth.getCurrentUserId();
-        final storageRef =
-            FirebaseStorage.instance.ref().child('userimages/$userId.jpg');
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('userimages/$userId.$fileExtension');
         print(storageRef);
+        print('aaaaaaaaaaaaaaaaaaaaa');
 
         // Upload the image file
         await storageRef.putFile(imageFile);
+        print('bbbbbbbbbbbbbbbbbbbb');
 
         // Get the download URL of the uploaded image
         final imageUrl = await storageRef.getDownloadURL();
+        print('cccccccccccccccccccccccc');
 
         // Update Firestore with the download URL
-        FirebaseFirestore.instance
-            .collection('userimages')
+        await FirebaseFirestore.instance
+            .collection('testdata')
             .doc(userId)
             .update({'imageurl': imageUrl});
 
-        // Refresh the UI or fetch new data
-        Provider.of<DatabaseService>(context, listen: false).updateUserData;
+        // Update the user data in the provider
+        Provider.of<DatabaseService>(context, listen: false).updateUserimage(
+          imageUrl,
+        );
       }
     } catch (error) {
       // Handle and display the error, e.g., show a SnackBar
@@ -420,37 +451,68 @@ class Profile_View extends StatelessWidget {
   }
 
   String _getUserName(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['name'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['name'];
     }
     return 'Guest';
   }
 
   String _getUserpassword(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['password'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['password'];
     }
     return 'password';
   }
 
   String _getphonenumber(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['phone'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['phone'];
     }
     return 'Phone number';
   }
 
   String _getemail(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['email'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['email'];
     }
+
     return 'Email';
   }
 
   String _getimageurl(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['imageurl'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['imageurl'];
     }
-    return '';
+    return 'imageurl';
   }
 }

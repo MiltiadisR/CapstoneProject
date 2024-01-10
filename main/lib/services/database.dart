@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:main/services/auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -16,13 +17,31 @@ class DatabaseService {
     String password,
     String imageurl,
   ) async {
-    await testCollection.doc(uid).set({
-      'name': name,
-      'phone': phone,
-      'email': email,
-      'password': password,
-      'imageurl': imageurl
-    });
+    try {
+      await testCollection.doc(uid).set({
+        'name': name,
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'imageurl': imageurl,
+      });
+    } catch (error) {
+      print('Error updating user data: $error');
+      throw error;
+    }
+  }
+
+  Future<void> updateUserimage(
+    String imageurl,
+  ) async {
+    try {
+      await testCollection.doc(uid).set({
+        'imageurl': imageurl,
+      });
+    } catch (error) {
+      print('Error updating user data: $error');
+      throw error;
+    }
   }
 
   Stream<QuerySnapshot> get members {
@@ -31,7 +50,7 @@ class DatabaseService {
 
   Future<void> deleteUserData() async {
     try {
-      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+      await testCollection.doc(uid).delete();
     } catch (error) {
       print('Error deleting user data: $error');
       throw error;

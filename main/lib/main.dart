@@ -12,7 +12,7 @@ void main() async {
 
   await Firebase.initializeApp(
     options: FirebaseOptions(
-      storageBucket: 'gs://thesis-59879.appspot.com/userimages',
+      storageBucket: 'gs://thesis-59879.appspot.com',
       apiKey: Constants.apiKey,
       appId: Constants.appId,
       messagingSenderId: Constants.messagingSenderId,

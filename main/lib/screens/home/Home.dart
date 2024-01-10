@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Load_data.dart';
 import 'package:main/Reservation_Details.dart';
+import 'package:main/services/auth.dart';
 import '../../services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return StreamProvider<QuerySnapshot?>.value(
@@ -99,8 +101,14 @@ class _Home_PageState extends State<Home> {
   }
 
   String _getUserName(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
     if (members.docs.isNotEmpty) {
-      return members.docs[0]['name'];
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['name'];
     }
     return 'Guest';
   }
