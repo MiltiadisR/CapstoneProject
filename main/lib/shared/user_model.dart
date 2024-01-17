@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 class UserModel {
   final String? id;
   final String fullname;

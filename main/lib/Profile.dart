@@ -30,7 +30,6 @@ class Profile_View extends StatelessWidget {
             String userphone = _getphonenumber(members);
             String useremail = _getemail(members);
             String userpassword = _getUserpassword(members);
-            String imageurl = _getimageurl(members);
 
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),

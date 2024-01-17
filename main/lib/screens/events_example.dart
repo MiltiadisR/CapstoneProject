@@ -1,7 +1,6 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/event_details_screen.dart';
 import 'package:main/ical_links_service.dart';
@@ -11,8 +10,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:icalendar_parser/icalendar_parser.dart';
 import '../utils.dart';
-import 'package:main/Settings.dart';
-import 'package:main/constants.dart';
 
 class TableEventsExample extends StatefulWidget {
   @override

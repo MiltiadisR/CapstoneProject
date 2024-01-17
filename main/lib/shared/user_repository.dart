@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:main/shared/user_model.dart';
@@ -20,6 +18,7 @@ class UserRepository extends GetxController {
               backgroundColor: Colors.green.withOpacity(0.1),
               colorText: Colors.green),
         )
+        // ignore: body_might_complete_normally_catch_error
         .catchError((error, StackTrace) {
       Get.snackbar('Error', 'Something went wrong. Try again',
           snackPosition: SnackPosition.BOTTOM,

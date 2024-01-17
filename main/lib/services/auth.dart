@@ -66,12 +66,15 @@ class AuthService {
                 colorText: Colors.green),
           );
       return _userFromFirebaseUser(user);
+      // ignore: unused_catch_stack
     } catch (error, StackTrace) {
       Get.snackbar('Error', 'Something went wrong. Try again',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.redAccent,
           colorText: Colors.red);
-      print(error.toString());
+      print(
+        error.toString(),
+      );
     }
   }
 
