@@ -65,7 +65,8 @@ class Profile_View extends StatelessWidget {
                     child: Column(
                       children: [
                         buildSectionTitle('Contact Information'),
-                        buildEditableInfoTile('Phone Number', userphone),
+                        buildEditableInfoTileforphonenumber(
+                            'Phone Number', userphone, context),
                         buildEditableInfoTile('Address', '123 Main St, City'),
                       ],
                     ),
@@ -80,7 +81,7 @@ class Profile_View extends StatelessWidget {
                       children: [
                         buildSectionTitle('Change Password'),
                         buildPasswordChangeTile(
-                            'Password', '••••••••' + userpassword),
+                            'Password', '••••••••' + userpassword, context),
 
                         // Notification Preferences
                         buildSectionTitle('Notification Preferences'),
@@ -138,22 +139,6 @@ class Profile_View extends StatelessWidget {
     );
   }
 
-  Widget buildInfoTile(String label, String value) {
-    return ListTile(
-      title: Text(
-        label,
-        style: TextStyle(color: Color(0xFFF4FBF9)),
-      ),
-      subtitle: Text(
-        value,
-        style: TextStyle(
-          color: Color(0xFFF4FBF9),
-          fontSize: 20,
-        ),
-      ),
-    );
-  }
-
   Widget buildEditableInfoTile(String label, String value) {
     return ListTile(
       title: Text(
@@ -174,7 +159,24 @@ class Profile_View extends StatelessWidget {
     );
   }
 
-  Widget buildPasswordChangeTile(String label, String value) {
+  Widget buildInfoTile(String label, String value) {
+    return ListTile(
+      title: Text(
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget buildEditableInfoTileforphonenumber(
+      String label, String value, BuildContext context) {
     return ListTile(
       title: Text(
         label,
@@ -189,7 +191,122 @@ class Profile_View extends StatelessWidget {
       ),
       trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
       onTap: () {
-        // Handle editing
+        _editPhoneNumber(context, value); // Pass the current phone number
+      },
+    );
+  }
+
+  Future<void> _editPhoneNumber(
+      BuildContext context, String currentPhoneNumber) async {
+    String newPhoneNumber = ''; // Set initial value to currentPhoneNumber
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Phone Number'),
+          content: TextField(
+            onChanged: (value) {
+              newPhoneNumber = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'New Phone Number',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                // Update the phone number in Firebase
+                final userId = _auth.getCurrentUserId();
+                await FirebaseFirestore.instance
+                    .collection('testdata')
+                    .doc(userId)
+                    .update({'phone': newPhoneNumber});
+
+                // Update the user data in the provider
+                Provider.of<DatabaseService>(context, listen: false)
+                    .updateUserPhoneNumber(newPhoneNumber);
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildPasswordChangeTile(
+      String label, String value, BuildContext context) {
+    return ListTile(
+      title: Text(
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
+      trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
+      onTap: () {
+        _editpassword(context, value); // Pass the current phone number
+      },
+    );
+  }
+
+  Future<void> _editpassword(
+      BuildContext context, String currentPhoneNumber) async {
+    String newpassword = ''; // Set initial value to currentPhoneNumber
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Password'),
+          content: TextField(
+            onChanged: (value) {
+              newpassword = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'New Password',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                // Update the phone number in Firebase
+                final userId = _auth.getCurrentUserId();
+                await FirebaseFirestore.instance
+                    .collection('testdata')
+                    .doc(userId)
+                    .update({'password': newpassword});
+
+                // Update the user data in the provider
+                Provider.of<DatabaseService>(context, listen: false)
+                    .updateUserPassword(newpassword);
+
+                _auth.getCurrentUserId();
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
       },
     );
   }
@@ -377,20 +494,20 @@ class Profile_View extends StatelessWidget {
           height: 10,
         ),
         GestureDetector(
-            onTap: () {
-              if (imageurl.isNotEmpty) {
-                // Pass the context to _uploadImage method
-                _uploadImage(context);
-              }
-            },
-            // Set to null when imageurl is empty
-            child: imageurl.isNotEmpty
-                ? Text("Change Profile Picture",
-                    style: TextStyle(
-                      color: Color(0xFFF4FBF9),
-                      fontSize: 15,
-                    ))
-                : null),
+          onTap: () {
+            if (imageurl.isNotEmpty) {
+              // Pass the context to _uploadImage method
+              _uploadImage(context);
+            }
+          },
+          child: imageurl.isNotEmpty
+              ? Text("Change Profile Picture",
+                  style: TextStyle(
+                    color: Color(0xFFF4FBF9),
+                    fontSize: 15,
+                  ))
+              : SizedBox(), // Add a SizedBox if imageurl is empty
+        ),
       ],
     );
   }
@@ -510,8 +627,14 @@ class Profile_View extends StatelessWidget {
       final userDoc = members.docs.firstWhere(
         (doc) => doc.id == userId,
       );
-      return userDoc['imageurl'];
+
+      final imageUrl = userDoc['imageurl'];
+
+      // Return the image URL if available, otherwise an empty string
+      return imageUrl.isNotEmpty ? imageUrl : '';
     }
-    return 'imageurl';
+
+    // Return an empty string if there are no documents
+    return '';
   }
 }

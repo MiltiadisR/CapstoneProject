@@ -63,7 +63,7 @@ class _TestIcalState extends State<TestIcal> {
     if (response.statusCode == 200) {
       var icsObj = ICalendar.fromString(response.body);
       String result = jsonEncode(icsObj.toJson());
-      print(result);
+      // print(result);
       return result;
     } else {
       print("Request failed with status Code: ${response.statusCode}");

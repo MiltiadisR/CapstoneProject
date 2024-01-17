@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Load_data.dart';
+import 'package:main/Notifications.dart';
 import 'package:main/Reservation_Details.dart';
 import 'package:main/services/auth.dart';
 import '../../services/database.dart';
@@ -50,9 +51,9 @@ class _Home_PageState extends State<Home> {
 
                     // Upcoming Reservations Overview
                     CardWidget(
-                      title: 'Upcoming Reservations',
-                      icon: Icons.calendar_today,
-                    ),
+                        title: 'Upcoming Reservations',
+                        icon: Icons.calendar_today,
+                        path: Reservation_Details()),
 
                     SizedBox(height: 16.0),
 
@@ -85,7 +86,9 @@ class _Home_PageState extends State<Home> {
 
                     // Other Card Widgets
                     CardWidget(
-                        title: 'Notifications', icon: Icons.notifications),
+                        title: 'Notifications',
+                        icon: Icons.notifications,
+                        path: Notifications_View()),
                     // CardWidget(title: 'Search Bar', icon: Icons.search),
                     // CardWidget(title: 'Featured Content', icon: Icons.star),
                     // CardWidget(title: 'Recent Activity', icon: Icons.history),
@@ -131,8 +134,9 @@ class _Home_PageState extends State<Home> {
 class CardWidget extends StatefulWidget {
   final String title;
   final IconData icon;
+  final Widget path;
 
-  CardWidget({required this.title, required this.icon});
+  CardWidget({required this.title, required this.icon, required this.path});
 
   @override
   State<CardWidget> createState() => _CardWidgetState();
@@ -148,6 +152,11 @@ class _CardWidgetState extends State<CardWidget> {
       ),
       child: InkWell(
         onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => widget.path,
+            ),
+          );
           // Add navigation or action on card tap
         },
         child: Padding(

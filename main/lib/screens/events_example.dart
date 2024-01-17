@@ -71,7 +71,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
   Future<List<String>> _fetchIcalData() async {
     try {
-      return await getIcalDataList();
+      return await _getIcalDataList();
     } catch (error) {
       print('Error fetching iCal data: $error');
       // Handle errors as needed
@@ -187,11 +187,11 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   }
 
   Future<List<String>> _initializeIcalDataList() async {
-    _icalDataList = await getIcalDataList();
+    _icalDataList = await _getIcalDataList();
     return _icalDataList;
   }
 
-  Future<List<String>> getIcalDataList() async {
+  Future<List<String>> _getIcalDataList() async {
     List<String> urls = await getUrls();
 
     // Use Future.wait to execute requests concurrently

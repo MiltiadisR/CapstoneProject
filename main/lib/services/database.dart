@@ -62,4 +62,16 @@ class DatabaseService {
       throw error;
     }
   }
+
+  Future<void> updateUserPhoneNumber(String newPhoneNumber) async {
+    await FirebaseFirestore.instance.collection('testdata').doc(uid).update({
+      'phone': newPhoneNumber,
+    });
+  }
+
+  Future<void> updateUserPassword(String newpassword) async {
+    await FirebaseFirestore.instance.collection('testdata').doc(uid).update({
+      'password': newpassword,
+    });
+  }
 }
