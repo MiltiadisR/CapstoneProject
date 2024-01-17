@@ -112,6 +112,20 @@ class _Home_PageState extends State<Home> {
     }
     return 'Guest';
   }
+
+  // ignore: unused_element
+  List _geticals(QuerySnapshot ICALLINKS) {
+    final userId = _auth.getCurrentUserId();
+
+    if (ICALLINKS.docs.isNotEmpty) {
+      // Find the document corresponding to the logged-in user
+      final userDoc = ICALLINKS.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['icalLinks'];
+    }
+    return [];
+  }
 }
 
 class CardWidget extends StatefulWidget {

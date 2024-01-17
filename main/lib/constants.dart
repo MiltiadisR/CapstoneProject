@@ -4,3 +4,5 @@ class Constants {
   static String messagingSenderId = "895725352961";
   static String projectId = "thesis-59879";
 }
+
+List<String> Links = [];

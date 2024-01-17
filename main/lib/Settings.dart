@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:main/services/auth.dart';
+import 'constants.dart';
 
 class Settings_View extends StatefulWidget {
   @override
@@ -77,8 +78,10 @@ class _Settings_ViewState extends State<Settings_View> {
                     return Text('No links saved');
                   }
 
-                  List<String> savedIcalLinks =
+                  final List<String> savedIcalLinks =
                       List<String>.from(snapshot.data?['icalLinks'] ?? []);
+
+                  Links.addAll(savedIcalLinks);
 
                   return Column(
                     children: [

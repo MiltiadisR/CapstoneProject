@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:main/services/auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -9,6 +8,9 @@ class DatabaseService {
   // Collection Reference
   final CollectionReference testCollection =
       FirebaseFirestore.instance.collection('testdata');
+
+  final CollectionReference icalCollection =
+      FirebaseFirestore.instance.collection('icalLinks');
 
   Future<void> updateUserData(
     String name,
@@ -46,6 +48,10 @@ class DatabaseService {
 
   Stream<QuerySnapshot> get members {
     return testCollection.snapshots();
+  }
+
+  Stream<QuerySnapshot> get ICALLINKS {
+    return icalCollection.snapshots();
   }
 
   Future<void> deleteUserData() async {

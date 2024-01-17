@@ -1,13 +1,18 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:main/event_details_screen.dart';
+import 'package:main/ical_links_service.dart';
+import 'package:main/services/auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:icalendar_parser/icalendar_parser.dart';
 import '../utils.dart';
+import 'package:main/Settings.dart';
+import 'package:main/constants.dart';
 
 class TableEventsExample extends StatefulWidget {
   @override
@@ -43,21 +48,38 @@ class Event {
 
 class _TableEventsExampleState extends State<TableEventsExample> {
   late final ValueNotifier<List<Event>> _selectedEvents;
+  final IcalLinksService _icalLinksService = IcalLinksService();
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  late List<String> _icalDataList; // Store iCal data here
 
   @override
   void initState() {
     super.initState();
-    _icalDataList = getIcalDataList();
 
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    // Fetch iCal data only at the start
+    _fetchIcalData().then((jsonDataList) {
+      setState(() {
+        _icalDataList = jsonDataList;
+        allEvents = getAllEvents(_icalDataList);
+      });
+    });
+  }
+
+  Future<List<String>> _fetchIcalData() async {
+    try {
+      return await getIcalDataList();
+    } catch (error) {
+      print('Error fetching iCal data: $error');
+      // Handle errors as needed
+      return [];
+    }
   }
 
   void _onListTileTap(Map<String, dynamic> event) {
@@ -127,11 +149,12 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
+      // Update _selectedEvents based on the stored iCal data
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
   }
@@ -155,30 +178,30 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     }
   }
 
-  late List<Future<String>> _icalDataList;
   String? propertyFilter;
   static List<Map<String, dynamic>> allEvents = [];
 
-  List<String> getUrls() {
-    return [
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/95a2a0be-00b1-4830-8742-0c43cf072878",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/aac123f5-2db7-4e7a-9d5f-7641a0527b11",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/abc6b05c-cc04-4ef4-90b2-22d1b306d597",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/928a4d5a-3930-46d2-b127-7d5b8a2c6241",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/00bcf820-1c96-4086-bc72-e23ea7a254f7",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/72be8e10-26b0-4788-a46b-c329f252ad17",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/b6204a16-a5ea-48b0-84f3-1c77362df3f6",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/553b81c8-fc4e-4068-8983-6f2f66dedb7e",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/9a1fa378-688a-4a6a-b518-36c2c9f033a0",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/1b0fc415-098a-4928-a976-78c923b6f4a4",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/e2fc4710-dc42-4650-96c9-73002628d51e",
-      "https://sync.guestyforhosts.com/bc19e1fc-037a-4e0e-abfc-4963423a4458/fb0d170e-d7b5-415c-8ecf-e90a04971b50",
-    ];
+  String userId = AuthService().getCurrentUserId();
+
+  Future<List<String>> getUrls() async {
+    List<String> savedIcalLinks =
+        await _icalLinksService.getSavedIcalLinks(userId);
+    return savedIcalLinks;
   }
 
-  List<Future<String>> getIcalDataList() {
-    List<String> urls = getUrls();
-    return urls.map((url) => getIcalData(url)).toList();
+  Future<List<String>> _initializeIcalDataList() async {
+    _icalDataList = await getIcalDataList();
+    return _icalDataList;
+  }
+
+  Future<List<String>> getIcalDataList() async {
+    List<String> urls = await getUrls();
+
+    // Use Future.wait to execute requests concurrently
+    List<Future<String>> futures = urls.map((url) => getIcalData(url)).toList();
+    List<String> dataList = await Future.wait(futures);
+
+    return dataList;
   }
 
   Future<String> getIcalData(String url) async {
@@ -187,7 +210,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     if (response.statusCode == 200) {
       var icsObj = ICalendar.fromString(response.body);
       String result = jsonEncode(icsObj.toJson());
-      print(result);
       return result;
     } else {
       print("Request failed with status Code: ${response.statusCode}");
@@ -371,7 +393,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
           const SizedBox(height: 8.0),
           Expanded(
             child: FutureBuilder<List<String>>(
-              future: Future.wait(_icalDataList),
+              future: _initializeIcalDataList(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
