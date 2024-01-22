@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/Accommodations.dart';
 import 'Reservation_Details.dart';
 import 'Notifications.dart';
 import 'Settings.dart';
@@ -41,6 +42,15 @@ class Menu extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => const Notifications_View()),
+                );
+              },
+            ),
+            buildMenuItem(
+              icon: Icons.house_outlined,
+              title: "Accommodations",
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const rooms()),
                 );
               },
             ),

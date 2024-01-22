@@ -5,28 +5,16 @@ import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:main/ical_links_service.dart';
 import 'package:main/services/auth.dart';
 
-class Reservation_Details extends StatefulWidget {
-  const Reservation_Details({super.key});
+class Reservation_Details_only_one extends StatefulWidget {
+  final String name;
+
+  Reservation_Details_only_one({required this.name});
 
   @override
-  State<Reservation_Details> createState() => _Reservation_DetailsState();
+  State<Reservation_Details_only_one> createState() => _TestIcalState();
 }
 
-class _Reservation_DetailsState extends State<Reservation_Details> {
-  @override
-  Widget build(BuildContext context) {
-    return TestIcal();
-  }
-}
-
-class TestIcal extends StatefulWidget {
-  const TestIcal({Key? key}) : super(key: key);
-
-  @override
-  State<TestIcal> createState() => _TestIcalState();
-}
-
-class _TestIcalState extends State<TestIcal> {
+class _TestIcalState extends State<Reservation_Details_only_one> {
   String? propertyFilter;
   static List<Map<String, dynamic>> allEvents = [];
   final IcalLinksService _icalLinksService = IcalLinksService();
@@ -120,12 +108,12 @@ class _TestIcalState extends State<TestIcal> {
     });
 
     // Apply property filter if selected
-    if (propertyFilter != null && propertyFilter != 'All') {
+    if (propertyFilter == null) {
       allEvents = allEvents
           .where((event) =>
               event['summary']
                   ?.toLowerCase()
-                  .contains(propertyFilter!.toLowerCase()) ??
+                  .contains(widget.name.toLowerCase()) ??
               false)
           .toList();
     }
@@ -214,43 +202,13 @@ class _TestIcalState extends State<TestIcal> {
           //},
           //child: Text('Print Events'),
           //),
-          DropdownButton<String>(
-            value: propertyFilter,
-            hint: Text(
-              'Select Property',
-              style: TextStyle(color: Color(0xFFF5FBF4)),
+          Text(
+            widget.name,
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFF5FBF4),
             ),
-            onChanged: (String? newValue) {
-              print("Selected Property: $newValue");
-              setState(() {
-                propertyFilter = newValue;
-              });
-            },
-            items: [
-              'All',
-              'Elegant & Pool',
-              'Family',
-              'Garden & Pool',
-              'Lake & Pool',
-              'Onore Villa',
-              'Private & Pool',
-              'Sea Suite',
-              'Sky Suite',
-              'Sunset & Pool',
-              'Nikos',
-              'Angeliki',
-              'Delphine'
-            ]
-                .map<DropdownMenuItem<String>>(
-                  (String property) => DropdownMenuItem<String>(
-                    value: property,
-                    child: Text(property,
-                        style: TextStyle(
-                          color: Color(0xFFF5FBF4),
-                        )),
-                  ),
-                )
-                .toList(),
           ),
           Expanded(
             child: FutureBuilder<List<String>>(
