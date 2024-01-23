@@ -48,7 +48,7 @@ class AuthService {
 
   // register with email and password
   Future registerWithEmailAndPassword(String email, String password,
-      String name, String phone, String imageurl) async {
+      String name, String phone, String imageurl, String address) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -58,7 +58,7 @@ class AuthService {
 
       // Create a new document for the  user with the uid
       await DatabaseService(uid: user.uid)
-          .updateUserData(name, phone, email, password, imageurl)
+          .updateUserData(name, phone, email, password, imageurl, address)
           .whenComplete(
             () => Get.snackbar('Success', 'Your account has been created',
                 snackPosition: SnackPosition.BOTTOM,

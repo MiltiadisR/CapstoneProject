@@ -30,6 +30,7 @@ class Profile_View extends StatelessWidget {
             String userphone = _getphonenumber(members);
             String useremail = _getemail(members);
             String userpassword = _getUserpassword(members);
+            String useraddress = _getaddress(members);
 
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -67,7 +68,14 @@ class Profile_View extends StatelessWidget {
                         buildSectionTitle('Contact Information'),
                         buildEditableInfoTileforphonenumber(
                             'Phone Number', userphone, context),
-                        buildEditableInfoTile('Address', '123 Main St, City'),
+                        buildEditableInfoTileforadress(
+                            'Address', useraddress, context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        buildSectionTitle('Change Password'),
+                        buildPasswordChangeTile(
+                            'Password', userpassword, context),
                       ],
                     ),
                   ),
@@ -79,10 +87,6 @@ class Profile_View extends StatelessWidget {
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        buildSectionTitle('Change Password'),
-                        buildPasswordChangeTile(
-                            'Password', '••••••••' + userpassword, context),
-
                         // Notification Preferences
                         buildSectionTitle('Notification Preferences'),
                         buildNotificationPreferencesTile(),
@@ -196,6 +200,27 @@ class Profile_View extends StatelessWidget {
     );
   }
 
+  Widget buildEditableInfoTileforadress(
+      String label, String value, BuildContext context) {
+    return ListTile(
+      title: Text(
+        label,
+        style: TextStyle(color: Color(0xFFF4FBF9)),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: Color(0xFFF4FBF9),
+          fontSize: 20,
+        ),
+      ),
+      trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
+      onTap: () {
+        _editadress(context, value); // Pass the current phone number
+      },
+    );
+  }
+
   Future<void> _editPhoneNumber(
       BuildContext context, String currentPhoneNumber) async {
     String newPhoneNumber = ''; // Set initial value to currentPhoneNumber
@@ -300,6 +325,53 @@ class Profile_View extends StatelessWidget {
                 // Update the user data in the provider
                 Provider.of<DatabaseService>(context, listen: false)
                     .updateUserPassword(newpassword);
+
+                _auth.getCurrentUserId();
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _editadress(BuildContext context, String currentaddress) async {
+    String newaddress = ''; // Set initial value to currentPhoneNumber
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Address'),
+          content: TextField(
+            onChanged: (value) {
+              newaddress = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'New Address',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                // Update the phone number in Firebase
+                final userId = _auth.getCurrentUserId();
+                await FirebaseFirestore.instance
+                    .collection('testdata')
+                    .doc(userId)
+                    .update({'address': newaddress});
+
+                // Update the user data in the provider
+                Provider.of<DatabaseService>(context, listen: false)
+                    .updateUserPassword(newaddress);
 
                 _auth.getCurrentUserId();
               },
@@ -444,6 +516,7 @@ class Profile_View extends StatelessWidget {
   }
 
   Future<void> showDeactivationConfirmationDialog(BuildContext context) async {
+    final userId = _auth.getCurrentUserId();
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -455,8 +528,8 @@ class Profile_View extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 // Perform the account deactivation/deletion logic here
-
-                DatabaseService(uid: '').deleteUserData();
+                await _auth.signOut();
+                DatabaseService(uid: userId).deleteUserData();
 
                 // Close the dialog
                 Navigator.of(context).pop();
@@ -577,6 +650,19 @@ class Profile_View extends StatelessWidget {
       return userDoc['name'];
     }
     return 'Guest';
+  }
+
+  String _getaddress(QuerySnapshot members) {
+    final userId = _auth.getCurrentUserId();
+
+    if (members.docs.isNotEmpty) {
+      // Find the document corresponding to the logged-in user
+      final userDoc = members.docs.firstWhere(
+        (doc) => doc.id == userId,
+      );
+      return userDoc['address'];
+    }
+    return 'N/A';
   }
 
   String _getUserpassword(QuerySnapshot members) {

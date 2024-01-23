@@ -18,6 +18,7 @@ class DatabaseService {
     String email,
     String password,
     String imageurl,
+    String address,
   ) async {
     try {
       await testCollection.doc(uid).set({
@@ -26,6 +27,7 @@ class DatabaseService {
         'email': email,
         'password': password,
         'imageurl': imageurl,
+        'address': address,
       });
     } catch (error) {
       print('Error updating user data: $error');
@@ -57,6 +59,7 @@ class DatabaseService {
   Future<void> deleteUserData() async {
     try {
       await testCollection.doc(uid).delete();
+      print('aaaaaaa');
     } catch (error) {
       print('Error deleting user data: $error');
       throw error;

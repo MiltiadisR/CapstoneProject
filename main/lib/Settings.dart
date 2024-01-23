@@ -16,6 +16,7 @@ class _Settings_ViewState extends State<Settings_View> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF0C3b2E),
       appBar: AppBar(
         title: Text('Settings'),
       ),
@@ -25,12 +26,15 @@ class _Settings_ViewState extends State<Settings_View> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Enter your iCal link:'),
+              Text(
+                'Enter your iCal link:',
+                style: TextStyle(color: Color(0xFFF5FBF4)),
+              ),
               TextField(
                 controller: _icalLinkController,
                 decoration: InputDecoration(
-                  hintText: 'https://your-ical-link.com',
-                ),
+                    hintText: 'https://your-ical-link.com',
+                    hintStyle: TextStyle(color: Color(0xFFF5FBF4))),
               ),
               SizedBox(height: 16),
               ElevatedButton(
@@ -62,40 +66,55 @@ class _Settings_ViewState extends State<Settings_View> {
                   // Clear the text field after saving
                   _icalLinkController.clear();
                 },
-                child: Text('Save iCal Link'),
+                child: Text(
+                  'Save iCal Link',
+                  style: TextStyle(color: Color(0xFF051908)),
+                ),
               ),
               SizedBox(height: 16),
               Text(
                 'Saved iCal Links:',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Color(0xFFF5FBF4)),
               ),
-              StreamBuilder<DocumentSnapshot>(
-                stream: _icalLinksCollection
-                    .doc(AuthService().getCurrentUserId())
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data?.data() == null) {
-                    return Text('No links saved');
-                  }
+              SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFF051908),
+                  borderRadius:
+                      BorderRadius.circular(10), // Adjust the value as needed
+                ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: _icalLinksCollection
+                      .doc(AuthService().getCurrentUserId())
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data?.data() == null) {
+                      return Text('No links saved');
+                    }
 
-                  final List<String> savedIcalLinks =
-                      List<String>.from(snapshot.data?['icalLinks'] ?? []);
+                    final List<String> savedIcalLinks =
+                        List<String>.from(snapshot.data?['icalLinks'] ?? []);
 
-                  Links.addAll(savedIcalLinks);
+                    Links.addAll(savedIcalLinks);
 
-                  return Column(
-                    children: [
-                      for (var link in savedIcalLinks)
-                        ListTile(
-                          title: Text(link),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => _deleteIcalLink(link),
+                    return Column(
+                      children: [
+                        for (var link in savedIcalLinks)
+                          ListTile(
+                            title: Text(
+                              link,
+                              style: TextStyle(color: Color(0xFFF5FBF4)),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => _deleteIcalLink(link),
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           ),

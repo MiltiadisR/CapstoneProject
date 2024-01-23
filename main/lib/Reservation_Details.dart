@@ -216,6 +216,8 @@ class _TestIcalState extends State<TestIcal> {
           //),
           DropdownButton<String>(
             value: propertyFilter,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            dropdownColor: Color(0xFF051908),
             hint: Text(
               'Select Property',
               style: TextStyle(color: Color(0xFFF5FBF4)),

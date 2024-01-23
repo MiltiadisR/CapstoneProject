@@ -27,6 +27,7 @@ class _RegisterState extends State<Register> {
   String phone = '';
   String name = '';
   String imageurl = '';
+  String address = '';
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +138,20 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: 20,
                           ),
+                          TextFormField(
+                              controller: controller.address,
+                              decoration: textInputDecoration.copyWith(
+                                  hintText: 'address',
+                                  hintStyle:
+                                      TextStyle(color: Color(0xFF1e2d4c)),
+                                  prefixIcon: Icon(Icons.location_on_outlined,
+                                      color: Color(0xFF1e2d4c))),
+                              onChanged: (val) {
+                                setState(() => address = val);
+                              }),
+                          SizedBox(
+                            height: 20,
+                          ),
                           ElevatedButton(
                             onPressed: () async {
                               if (_formkey.currentState!.validate()) ;
@@ -145,7 +160,12 @@ class _RegisterState extends State<Register> {
                               });
                               dynamic result =
                                   await _auth.registerWithEmailAndPassword(
-                                      email, password, name, phone, imageurl);
+                                      email,
+                                      password,
+                                      name,
+                                      phone,
+                                      imageurl,
+                                      address);
                               if (result == null) {
                                 setState(() {
                                   loading = false;

@@ -165,10 +165,11 @@ class _RoomWidgetState extends State<RoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200.0, // Set your desired width
+      width: 400.0, // Set your desired width
       height: 200.0, // Set your desired height
       child: Card(
         elevation: 4.0,
+        color: Color(0xFFF5FBF4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -186,11 +187,14 @@ class _RoomWidgetState extends State<RoomWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(widget.icon, size: 80.0, color: Colors.blue),
+                Icon(widget.icon, size: 80.0, color: Color(0xFF051908)),
                 SizedBox(height: 1.0),
                 Text(
                   widget.title,
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF051908)),
                   textAlign: TextAlign.center,
                 ),
               ],

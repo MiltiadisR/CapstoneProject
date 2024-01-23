@@ -105,7 +105,9 @@ class _Home_PageState extends State<Home> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    CarouselDemo(),
+                    userName == 'Miltiadis Raptis'
+                        ? CarouselDemo()
+                        : Container(),
                   ],
                 ),
               ),
@@ -337,6 +339,7 @@ class _RoomWidgetState extends State<RoomWidget> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
+        color: Color(0xFFF5FBF4),
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(
