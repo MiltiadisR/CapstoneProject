@@ -18,6 +18,16 @@ class _Notifications_ViewState extends State<Notifications_View> {
               style: TextStyle(
                 color: Color(0xFFacbdaa),
               ))),
+      body: Container(
+        alignment: Alignment.center,
+        child: Text(
+          'Coming soon...',
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFF4FBF9)),
+        ),
+      ),
     );
   }
 }

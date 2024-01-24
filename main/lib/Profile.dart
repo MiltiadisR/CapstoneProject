@@ -53,8 +53,6 @@ class Profile_View extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Add more user information fields as needed
-
                   // Contact Information
                   Container(
                     width: double.infinity,
@@ -68,7 +66,7 @@ class Profile_View extends StatelessWidget {
                         buildSectionTitle('Contact Information'),
                         buildEditableInfoTileforphonenumber(
                             'Phone Number', userphone, context),
-                        buildEditableInfoTileforadress(
+                        buildEditableInfoTileforaddress(
                             'Address', useraddress, context),
                         SizedBox(
                           height: 10,
@@ -79,8 +77,6 @@ class Profile_View extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Add more contact information fields as needed
-
                   // Password Change
                   Container(
                     width: double.infinity,
@@ -157,9 +153,7 @@ class Profile_View extends StatelessWidget {
         ),
       ),
       trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
-      onTap: () {
-        // Handle editing
-      },
+      onTap: () {},
     );
   }
 
@@ -200,7 +194,7 @@ class Profile_View extends StatelessWidget {
     );
   }
 
-  Widget buildEditableInfoTileforadress(
+  Widget buildEditableInfoTileforaddress(
       String label, String value, BuildContext context) {
     return ListTile(
       title: Text(
@@ -283,14 +277,14 @@ class Profile_View extends StatelessWidget {
       ),
       trailing: Icon(Icons.edit, color: Color(0xFFF4FBF9)),
       onTap: () {
-        _editpassword(context, value); // Pass the current phone number
+        _editpassword(context, value);
       },
     );
   }
 
   Future<void> _editpassword(
       BuildContext context, String currentPhoneNumber) async {
-    String newpassword = ''; // Set initial value to currentPhoneNumber
+    String newpassword = '';
 
     await showDialog(
       context: context,
@@ -314,8 +308,7 @@ class Profile_View extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
-                // Update the phone number in Firebase
+                Navigator.of(context).pop();
                 final userId = _auth.getCurrentUserId();
                 await FirebaseFirestore.instance
                     .collection('testdata')
@@ -337,7 +330,7 @@ class Profile_View extends StatelessWidget {
   }
 
   Future<void> _editadress(BuildContext context, String currentaddress) async {
-    String newaddress = ''; // Set initial value to currentPhoneNumber
+    String newaddress = '';
 
     await showDialog(
       context: context,
@@ -452,9 +445,7 @@ class Profile_View extends StatelessWidget {
           fontSize: 20,
         ),
       ),
-      onTap: () {
-        // Handle privacy settings
-      },
+      onTap: () {},
     );
   }
 
@@ -467,9 +458,7 @@ class Profile_View extends StatelessWidget {
           fontSize: 20,
         ),
       ),
-      onTap: () {
-        // Handle feedback and ratings
-      },
+      onTap: () {},
     );
   }
 

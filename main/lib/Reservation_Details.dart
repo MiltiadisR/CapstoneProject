@@ -168,15 +168,22 @@ class _TestIcalState extends State<TestIcal> {
     return Column(
       children: [
         ListTile(
-          title: Text('$location - $guestName'),
+          title: Text(
+            '$location - $guestName',
+            style: TextStyle(color: Color(0xFFacbdaa)),
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Start: $startDate | End: $endDate'),
+              Text(
+                'Start: $startDate | End: $endDate',
+                style: TextStyle(color: Color(0xffE3F4E0)),
+              ),
               SizedBox(height: 4),
               Text(
                 'Phone Number: $phoneNumber',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Color(0xFFD3EDCF)),
               ),
             ],
           ),
@@ -273,10 +280,9 @@ class _TestIcalState extends State<TestIcal> {
                     padding: EdgeInsets.all(
                         10.0), // Add padding inside the container
                     decoration: BoxDecoration(
-                      color:
-                          Color(0xFFF5FBF4), // Set the desired background color
+                      color: Color(0xFF051908),
                       borderRadius: BorderRadius.circular(
-                          16.0), // Set the radius for rounded edges
+                          10), // Adjust the value as needed
                     ),
                     child: ListView.builder(
                       itemCount: allEvents.length,

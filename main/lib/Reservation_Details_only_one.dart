@@ -156,15 +156,22 @@ class _TestIcalState extends State<Reservation_Details_only_one> {
     return Column(
       children: [
         ListTile(
-          title: Text('$location - $guestName'),
+          title: Text(
+            '$location - $guestName',
+            style: TextStyle(color: Color(0xFFacbdaa)),
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Start: $startDate | End: $endDate'),
+              Text(
+                'Start: $startDate | End: $endDate',
+                style: TextStyle(color: Color(0xffE3F4E0)),
+              ),
               SizedBox(height: 4),
               Text(
                 'Phone Number: $phoneNumber',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Color(0xFFD3EDCF)),
               ),
             ],
           ),
@@ -230,7 +237,7 @@ class _TestIcalState extends State<Reservation_Details_only_one> {
                         10.0), // Add padding inside the container
                     decoration: BoxDecoration(
                       color:
-                          Color(0xFFF5FBF4), // Set the desired background color
+                          Color(0xFF051908), // Set the desired background color
                       borderRadius: BorderRadius.circular(
                           16.0), // Set the radius for rounded edges
                     ),

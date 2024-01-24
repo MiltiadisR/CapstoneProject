@@ -4,6 +4,7 @@ import 'package:main/Load_data.dart';
 import 'package:main/Notifications.dart';
 import 'package:main/Reservation_Details.dart';
 import 'package:main/Reservation_Details_only_one.dart';
+import 'package:main/Settings.dart';
 import 'package:main/services/auth.dart';
 import '../../services/database.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,6 @@ class _Home_PageState extends State<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Personalized Greetings
                     Text(
                       'Hi, $userName!',
                       style: TextStyle(
@@ -50,52 +50,55 @@ class _Home_PageState extends State<Home> {
                           color: Color(0xFFF4FBF9)),
                     ),
                     SizedBox(height: 16.0),
-
-                    // Upcoming Reservations Overview
-                    CardWidget(
-                        title: 'Upcoming Reservations',
-                        icon: Icons.calendar_today,
-                        path: Reservation_Details()),
-
-                    SizedBox(height: 16.0),
-
-                    // Quick Actions
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Load_Data(),
-                              ),
-                            );
-                          },
-                          child: Text('Create Reservation'),
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: CardWidget(
+                              title: 'Upcoming Reservations',
+                              icon: Icons.calendar_today,
+                              path: Reservation_Details()),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Reservation_Details(),
-                              ),
-                            );
-                          },
-                          child: Text('Reservations'),
-                        ),
+                        FittedBox(
+                            fit: BoxFit.contain,
+                            child: CardWidget(
+                                title: 'Your iCal Links',
+                                icon: Icons.data_object_outlined,
+                                path: Settings_View())),
                       ],
                     ),
-
-                    // Other Card Widgets
+                    SizedBox(height: 16.0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     ElevatedButton(
+                    //       onPressed: () {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => Load_Data(),
+                    //           ),
+                    //         );
+                    //       },
+                    //       child: Text('Create Reservation'),
+                    //     ),
+                    //     ElevatedButton(
+                    //       onPressed: () {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => Reservation_Details(),
+                    //           ),
+                    //         );
+                    //       },
+                    //       child: Text('Reservations'),
+                    //     ),
+                    //   ],
+                    // ),
                     CardWidget(
                         title: 'Notifications',
                         icon: Icons.notifications,
                         path: Notifications_View()),
-                    // CardWidget(title: 'Search Bar', icon: Icons.search),
-                    // CardWidget(title: 'Featured Content', icon: Icons.star),
-                    // CardWidget(title: 'Recent Activity', icon: Icons.history),
-                    // CardWidget(title: 'Promotions or Announcements',icon: Icons.announcement,),
-                    SizedBox(height: 16.0),
+                    SizedBox(height: 50.0),
                     Text(
                       'Accommodations',
                       style: TextStyle(
@@ -122,7 +125,7 @@ class _Home_PageState extends State<Home> {
     final userId = _auth.getCurrentUserId();
 
     if (members.docs.isNotEmpty) {
-      // Find the document corresponding to the logged-in user
+      // we try to get the name of the user
       final userDoc = members.docs.firstWhere(
         (doc) => doc.id == userId,
       );
@@ -131,19 +134,18 @@ class _Home_PageState extends State<Home> {
     return 'Guest';
   }
 
-  // ignore: unused_element
-  List _geticals(QuerySnapshot ICALLINKS) {
-    final userId = _auth.getCurrentUserId();
+  //List _geticals(QuerySnapshot ICALLINKS) {
+  // final userId = _auth.getCurrentUserId();
 
-    if (ICALLINKS.docs.isNotEmpty) {
-      // Find the document corresponding to the logged-in user
-      final userDoc = ICALLINKS.docs.firstWhere(
-        (doc) => doc.id == userId,
-      );
-      return userDoc['icalLinks'];
-    }
-    return [];
-  }
+  // if (ICALLINKS.docs.isNotEmpty) {
+  //Here we try to find if the user has the  Find the document corresponding to the logged-in user
+  //final userDoc = ICALLINKS.docs.firstWhere(
+  //(doc) => doc.id == userId,
+  //);
+  //return userDoc['icalLinks'];
+  //}
+  // return [];
+  //}
 }
 
 class CarouselDemo extends StatelessWidget {
@@ -284,32 +286,36 @@ class CardWidget extends StatefulWidget {
 class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => widget.path,
-            ),
-          );
-          // Add navigation or action on card tap
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Icon(widget.icon, size: 40.0, color: Colors.blue),
-              SizedBox(height: 8.0),
-              Text(
-                widget.title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+    return Container(
+      width: 150.0,
+      height: 120.0,
+      child: Card(
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        color: Color(0xFFF5FBF4),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => widget.path,
               ),
-            ],
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Icon(widget.icon, size: 40.0, color: Colors.blue),
+                SizedBox(height: 8.0),
+                Text(
+                  widget.title,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -332,8 +338,8 @@ class _RoomWidgetState extends State<RoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200.0, // Set your desired width
-      height: 200.0, // Set your desired height
+      width: 200.0,
+      height: 200.0,
       child: Card(
         elevation: 4.0,
         shape: RoundedRectangleBorder(
@@ -347,7 +353,6 @@ class _RoomWidgetState extends State<RoomWidget> {
                 builder: (context) => widget.path,
               ),
             );
-            // Add navigation or action on card tap
           },
           child: Padding(
             padding: const EdgeInsets.all(5.0),
