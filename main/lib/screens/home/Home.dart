@@ -306,7 +306,7 @@ class _CardWidgetState extends State<CardWidget> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Icon(widget.icon, size: 40.0, color: Colors.blue),
+                Icon(widget.icon, size: 38.0, color: Colors.blue),
                 SizedBox(height: 8.0),
                 Text(
                   widget.title,
