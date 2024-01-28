@@ -169,7 +169,7 @@ class _RegisterState extends State<Register> {
                               if (result == null) {
                                 setState(() {
                                   loading = false;
-                                  error = 'please supply a valid email';
+                                  error = 'Please supply a valid email';
                                 });
                               }
                             },

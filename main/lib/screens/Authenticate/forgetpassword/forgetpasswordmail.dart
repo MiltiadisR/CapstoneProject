@@ -7,6 +7,7 @@ class ForgetPasswordmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String contact = '';
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -20,9 +21,13 @@ class ForgetPasswordmailScreen extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
-                      decoration: textInputDecoration.copyWith(
-                          hintText: 'Email',
-                          prefixIcon: Icon(Icons.mail_outline_rounded))),
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'Email',
+                        prefixIcon: Icon(Icons.mail_outline_rounded)),
+                    onChanged: (val) {
+                      contact = val;
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -32,7 +37,9 @@ class ForgetPasswordmailScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => OTPScreen(),
+                                builder: (context) => OTPScreen(
+                                  contact: contact,
+                                ),
                               ),
                             );
                           },

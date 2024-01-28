@@ -222,7 +222,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     return [];
   }
 
-//----This part is for the filtering and sorting of the events----------------//
   List<Map<String, dynamic>> getAllEvents(List<String> jsonDataList) {
     List<Map<String, dynamic>> allEvents = [];
     for (String jsonData in jsonDataList) {
@@ -230,7 +229,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     }
     return allEvents;
   }
-// ---------------------------------------------------------------------------//
 
   List<String> getDistinctProperties(List<Map<String, dynamic>> events) {
     Set<String> distinctProperties = Set<String>();

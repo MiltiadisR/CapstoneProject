@@ -8,6 +8,7 @@ class ForgetPasswordphoneScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String contact = '';
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -21,9 +22,13 @@ class ForgetPasswordphoneScreen extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
-                      decoration: textInputDecoration.copyWith(
-                          hintText: 'Phone Number',
-                          prefixIcon: Icon(Icons.numbers))),
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'Phone Number',
+                        prefixIcon: Icon(Icons.numbers)),
+                    onChanged: (val) {
+                      contact = val;
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -33,7 +38,9 @@ class ForgetPasswordphoneScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => OTPScreen(),
+                                builder: (context) => OTPScreen(
+                                  contact: contact,
+                                ),
                               ),
                             );
                           },
