@@ -583,7 +583,6 @@ class Profile_View extends StatelessWidget {
         final imageFile = File(pickedFile.path);
 
         // Check if the picked file is an image
-        // Check if the picked file is an image
         final allowedExtensions = ['jpg', 'jpeg', 'png'];
         final fileExtension = pickedFile.path.split('.').last.toLowerCase();
 
@@ -596,15 +595,12 @@ class Profile_View extends StatelessWidget {
             .ref()
             .child('userimages/$userId.$fileExtension');
         print(storageRef);
-        print('aaaaaaaaaaaaaaaaaaaaa');
 
         // Upload the image file
         await storageRef.putFile(imageFile);
-        print('bbbbbbbbbbbbbbbbbbbb');
 
         // Get the download URL of the uploaded image
         final imageUrl = await storageRef.getDownloadURL();
-        print('cccccccccccccccccccccccc');
 
         // Update Firestore with the download URL
         await FirebaseFirestore.instance
