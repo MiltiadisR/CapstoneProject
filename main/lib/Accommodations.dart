@@ -33,6 +33,14 @@ class CarouselDemo extends StatelessWidget {
             FittedBox(
               fit: BoxFit.contain,
               child: RoomWidget(
+                title: 'Onore Villa',
+                icon: Icons.home_outlined,
+                path: Reservation_Details_only_one(name: 'Onore Villa'),
+              ),
+            ),
+            FittedBox(
+              fit: BoxFit.contain,
+              child: RoomWidget(
                 title: 'Elegant & Pool',
                 icon: Icons.home_outlined,
                 path: Reservation_Details_only_one(name: 'Elegant & Pool'),
